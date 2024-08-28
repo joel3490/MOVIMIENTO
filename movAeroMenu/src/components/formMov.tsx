@@ -3,6 +3,8 @@ import { Form, useActionData, ActionFunctionArgs, redirect, useLocation } from "
 import { crearMov } from "../servicioApi/MovService"
 import ErrorMensaje from "./ErrorMensaje"
 import { fpl } from "../types/FplServices"
+import { socket } from "../socket/coneccionSocket"
+
 
 export async function action({ request }: ActionFunctionArgs) {
 
@@ -17,16 +19,27 @@ export async function action({ request }: ActionFunctionArgs) {
 
 
   //console.log(data) para ver q llegue los datos hasta ahi
-  //let error = "";
-  //if (Object.values(data).includes("")) {
-    //error = "todos los campos son obligatorios";}
-  //if (error.length) { return error; }
+  
   await crearMov(data);
 //console.log(data) // muestra los datos q se capturaron del formulario
   return redirect("/");
 }
 
 function FormMov() {
+
+  const [isConnected, setIsConnected] = useState(false);
+
+  useEffect(() => {
+    // Escucha los eventos de conexión y desconexión
+    socket.on('connect', () => setIsConnected(true));
+    socket.on('disconnect', () => setIsConnected(false));
+
+    // Limpia los eventos cuando el componente se desmonta
+    return () => {
+      socket.off('connect');
+      socket.off('disconnect');
+    };
+  }, []);
 
   const location = useLocation();
   const state = location.state as { selectedFpl?: fpl };
@@ -214,6 +227,8 @@ function FormMov() {
 
   return (
     <>
+      <h2>{isConnected ? 'conectado' : 'no conectado'}</h2>
+
       {error && <ErrorMensaje mensaje={error} />}
 
       <Form method="POST" className="w-full max-w-lg">

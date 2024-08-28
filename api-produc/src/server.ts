@@ -23,7 +23,7 @@ import morgan from 'morgan'
 
  connectionDB() //con estp se utiliza para usar esa funcion de coneccion de la base de datos
 //INSTANCIA DE EXPRESS
- const server = express()
+ const serverMov = express()
 
  //permitir conexiones 
  const corsOptions : CorsOptions = {
@@ -35,19 +35,19 @@ import morgan from 'morgan'
         //console.log('permiitir')
     //}
  }
- server.use(cors(corsOptions))
+ serverMov.use(cors(corsOptions))
 
  //LEER DATOS DE FORMUALARIO
- server.use(express.json())
+ serverMov.use(express.json())
 
-server.use(morgan('dev'))
+ serverMov.use(morgan('dev'))
 
 
 //es como la url padre 
-server.use('/api/products', routerProduct)
-server.use('/fpl', routeFpl)
-server.use('/mov', routeMov)
+serverMov.use('/api/products', routerProduct)
+serverMov.use('/fpl', routeFpl)
+serverMov.use('/mov', routeMov)
 
 
 
-export default server
+export default serverMov
