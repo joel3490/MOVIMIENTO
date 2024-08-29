@@ -4,6 +4,9 @@ import { crearMov } from "../servicioApi/MovService"
 import ErrorMensaje from "./ErrorMensaje"
 import { fpl } from "../types/FplServices"
 import { socket } from "../socket/coneccionSocket"
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -28,18 +31,43 @@ export async function action({ request }: ActionFunctionArgs) {
 function FormMov() {
 
   const [isConnected, setIsConnected] = useState(false);
+  const [nuevoMensaje, setNuevoMensaje] = useState('')
+
+
 
   useEffect(() => {
-    // Escucha los eventos de conexión y desconexión
     socket.on('connect', () => setIsConnected(true));
-    socket.on('disconnect', () => setIsConnected(false));
-
-    // Limpia los eventos cuando el componente se desmonta
+    socket.on('enviarMov', (data)=>{
+      console.log(data)
+    })
     return () => {
       socket.off('connect');
-      socket.off('disconnect');
-    };
+      socket.off('enviarMov');
+    }
   }, []);
+
+  const enviarMensaje = () =>{
+    socket.emit('enviarMov',{
+      id: socket.id,
+      mensaje:nuevoMensaje
+    })
+    toast.success('Se envió el vuelo', {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+  }
+
+
+
+
+
+
 
   const location = useLocation();
   const state = location.state as { selectedFpl?: fpl };
@@ -228,6 +256,7 @@ function FormMov() {
   return (
     <>
       <h2>{isConnected ? 'conectado' : 'no conectado'}</h2>
+      <ToastContainer />
 
       {error && <ErrorMensaje mensaje={error} />}
 
@@ -645,6 +674,7 @@ function FormMov() {
               id="obs"
               name="obs"
               placeholder="observacion"
+              onChange={e => setNuevoMensaje(e.target.value)}
             />
           </div>
 
@@ -652,7 +682,10 @@ function FormMov() {
         <br />
         <div className="flex space-x-4 ...">
           <div>
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            <button 
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={enviarMensaje}
+            >
               REGISTRAR
             </button>
           </div>

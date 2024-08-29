@@ -10,7 +10,15 @@ const io = require  ('socket.io')(server, {
 })
 
 io.on('connection', (socket)=>{
-    console.log('se conecto un cliente');    
+    console.log('se conecto un cliente'); 
+    
+    socket.on('enviarMov',(data)=>{
+        console.log(data)
+        socket.broadcast.emit('enviarMov', data)
+        //io.emit('enviarMov', data) //para q llegue el dato para quien envia tambien
+    })
+
+
 })
 
 
