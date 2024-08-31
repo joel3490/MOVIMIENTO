@@ -18,7 +18,12 @@ export async function crearMov(data: MovData) {
     console.log(result)
     if (result.success) {
       const url = `${import.meta.env.VITE_API_URL}/mov/crearMov`;
-      await axios.post(url, result.output);
+      const response= await axios.post(url, result.output);
+
+      const nuevoId = response.data.id;
+      console.log('ID del nuevo movimiento desde el servicio:', nuevoId);
+      return nuevoId
+
     } else {
       throw new Error('Datos no válidos');
     }

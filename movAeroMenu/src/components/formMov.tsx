@@ -4,16 +4,16 @@ import { crearMov } from "../servicioApi/MovService"
 import ErrorMensaje from "./ErrorMensaje"
 import { fpl } from "../types/FplServices"
 import { socket } from "../socket/coneccionSocket"
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 
 
 export async function action({ request }: ActionFunctionArgs) {
 
 
-  const f = await request.formData();
-  const data: { [key: string]: any } = {};
+  const f = await request.formData()
+  const data: { [key: string]: any } = {}
 
   f.forEach((value, key) => {
     data[key] = value;
@@ -23,7 +23,13 @@ export async function action({ request }: ActionFunctionArgs) {
 
   //console.log(data) para ver q llegue los datos hasta ahi
   
-  await crearMov(data);
+  //await crearMov(data);
+  const nuevoId = await crearMov(data);
+  console.log('desde el formulario', nuevoId);
+  
+  
+
+  
 //console.log(data) // muestra los datos q se capturaron del formulario
   return redirect("/");
 }
@@ -32,6 +38,29 @@ function FormMov() {
 
   const [isConnected, setIsConnected] = useState(false);
   const [nuevoMensaje, setNuevoMensaje] = useState('')
+
+
+  const [nuevoId, setNuevoId] = useState('')
+
+  
+  const manejarEnvioFormulario = async () => {
+    // Aquí manejas la lógica de envío del formulario y capturas el ID
+    const f = new FormData(); // Suponiendo que estás usando FormData
+    const data: Record<string, any> = {} // Convertir FormData a objeto
+
+    f.forEach((value, key) => {
+      data[key] = value;
+    });
+
+    const id = await crearMov(data);
+    if (id!== undefined) {
+      setNuevoId(id); // Actualizar el estado con el nuevo ID
+      console.log('ID del nuevo movimiento desde el componente:', nuevoId);
+    }
+  };
+
+  
+  
 
 
 
@@ -640,10 +669,6 @@ function FormMov() {
             />
           </div>
         </div>
-
-
-
-
 
         <div className="flex flex-wrap -mx-3 mb-1">
           <div className="w-full md:w-1/3 px-3">

@@ -15,7 +15,6 @@ class Mov extends Model {
     })
     declare id: number;
 
-
     @Column({
         type: DataType.DATEONLY,
         allowNull: false,

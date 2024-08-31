@@ -142,7 +142,8 @@ export const createMov = async (req: Request, res: Response) => {
             estado
         });
 
-        res.json({ data: mov });
+        res.status(201).json({ id: mov.id });
+       // console.log (mov.id)
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: `Error creating movement: ${error.message}` });

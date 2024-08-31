@@ -1,6 +1,7 @@
 import { string, object, optional } from "valibot";
 
 export const ValidarMovSchema = object({
+    
     fecha: string(),
     idAvion: string(),
     modelo: string(),
@@ -29,7 +30,7 @@ type MovData = {
 };
 
 export function validarCampos(data: MovData): string | null {
-  // Define los campos que son obligatorios
+  // Definir los campos que son obligatorios
   const requiredFields = [
     "fecha",
     "idAvion",

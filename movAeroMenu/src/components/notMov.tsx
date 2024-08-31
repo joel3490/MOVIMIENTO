@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
-import React from "react";
-import { MdFlight } from "react-icons/md";
-import { socket } from "../socket/coneccionSocket";
+import { useState, useEffect } from "react"
+import React from "react"
+import { MdFlight } from "react-icons/md"
+import { socket } from "../socket/coneccionSocket"
 
 type Mensaje = {
   usuario: string;
@@ -9,42 +9,44 @@ type Mensaje = {
 };
 
 function NotMov() {
+  
   const [mensajes, setMensajes] = useState<Mensaje[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
     socket.on("enviarMov", (data) => {
-      console.log(data, "desde el notMov");
-      setMensajes((mensajes) => [...mensajes, data]);
-      setUnreadCount((prevCount) => prevCount + 1);
-    });
+      console.log(data, "desde el notMov")
+      setMensajes((mensajes) => [...mensajes, data])
+      setUnreadCount((prevCount) => prevCount + 1)
+    })
 
     return () => {
-      socket.off("connect");
-      socket.off("chat_mensaje");
-    };
-  }, []);
+      socket.off("connect")
+      socket.off("chat_mensaje")
+    }
+  }, [])
 
-  const [isHovered, setIsHovered] = useState(false);
+
+  const [isHovered, setIsHovered] = useState(false)
   const handleMouseEnter = () => {
-    setIsHovered(true);
-  };
+    setIsHovered(true)
+  }
 
   const handleMouseLeave = () => {
-    setIsHovered(false);
-  };
+    setIsHovered(false)
+  }
 
   const handleRecibir = (index: number) => {
     // Eliminar el mensaje del array
     setMensajes((prevMensajes) => {
-      const nuevosMensajes = [...prevMensajes];
+      const nuevosMensajes = [...prevMensajes]
       nuevosMensajes.splice(index, 1); // Elimina el mensaje por índice
       return nuevosMensajes;
-    });
+    })
 
     // Decrementar el contador de mensajes no leídos
-    setUnreadCount((prevCount) => Math.max(prevCount - 1, 0));
-  };
+    setUnreadCount((prevCount) => Math.max(prevCount - 1, 0))
+  }
 
   return (
     <>
