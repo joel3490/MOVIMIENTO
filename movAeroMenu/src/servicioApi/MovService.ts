@@ -21,7 +21,7 @@ export async function crearMov(data: MovData) {
       const response= await axios.post(url, result.output);
 
       const nuevoId = response.data.id;
-      console.log('ID del nuevo movimiento desde el servicio:', nuevoId);
+      //console.log('ID del nuevo movimiento desde el servicio:', nuevoId);
       return nuevoId
 
     } else {

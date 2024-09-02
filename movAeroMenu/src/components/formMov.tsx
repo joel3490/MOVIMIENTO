@@ -26,9 +26,22 @@ export async function action({ request }: ActionFunctionArgs) {
   //await crearMov(data);
   const nuevoId = await crearMov(data);
   console.log('desde el formulario', nuevoId);
-  
-  
 
+  socket.emit('enviarMov', {
+    id: socket.id,
+    idmov: nuevoId, 
+  });
+  
+  toast.success('Se envió el vuelo', {
+    position: "top-right",
+    autoClose: 1000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "dark",
+  });
   
 //console.log(data) // muestra los datos q se capturaron del formulario
   return redirect("/");
@@ -38,30 +51,6 @@ function FormMov() {
 
   const [isConnected, setIsConnected] = useState(false);
   const [nuevoMensaje, setNuevoMensaje] = useState('')
-
-
-  const [nuevoId, setNuevoId] = useState('')
-
-  
-  const manejarEnvioFormulario = async () => {
-    // Aquí manejas la lógica de envío del formulario y capturas el ID
-    const f = new FormData(); // Suponiendo que estás usando FormData
-    const data: Record<string, any> = {} // Convertir FormData a objeto
-
-    f.forEach((value, key) => {
-      data[key] = value;
-    });
-
-    const id = await crearMov(data);
-    if (id!== undefined) {
-      setNuevoId(id); // Actualizar el estado con el nuevo ID
-      console.log('ID del nuevo movimiento desde el componente:', nuevoId);
-    }
-  };
-
-  
-  
-
 
 
   useEffect(() => {
@@ -91,12 +80,6 @@ function FormMov() {
       theme: "dark",
     });
   }
-
-
-
-
-
-
 
   const location = useLocation();
   const state = location.state as { selectedFpl?: fpl };

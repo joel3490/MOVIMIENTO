@@ -17,8 +17,7 @@ io.on('connection', (socket)=>{
         socket.broadcast.emit('enviarMov', data)
         //io.emit('enviarMov', data) //para q llegue el dato para quien envia tambien
     })
-
-
+    
 })
 
 
