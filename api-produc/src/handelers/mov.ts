@@ -5,28 +5,11 @@ export const getMov = async(req : Request, res: Response)=> {
     try {
         const mov = await Mov.findAll({
             attributes:[
-            'id',
-            'fecha',
-            'idAvion',
-            'modelo',
-            'propietario',
-            'procedencia',
-            'destino',
-            'horaDespegue',
-            'horaArribo',
-            'ruta',
-            'nroVuelo',
-            'obs',
-            'idControlador',
-            'nivel',
-            'eobt',
-            'destProcedencia',
-            'pistaProcedencia',
-            'calleProcedencia',
-            'destArribo',
-            'pistaArribo',
-            'calleArribo',
-            'estado'
+            'id', 'fecha', 'idAvion', 'modelo', 'propietario',
+            'procedencia', 'destino',  'horaDespegue', 'horaArribo',
+            'ruta', 'nroVuelo', 'obs', 'idControlador', 'nivel',
+            'eobt',  'destProcedencia', 'pistaProcedencia', 'calleProcedencia',
+            'destArribo', 'pistaArribo', 'calleArribo', 'estado'
             ],
             
             order: [['id', 'DESC']],
@@ -51,28 +34,11 @@ export const getMovById = async(req : Request, res: Response)=> {
         const {id} = req.params
         const mov = await Mov.findByPk(id,{
             attributes:[
-            'id',
-            'fecha',
-            'idAvion',
-            'modelo',
-            'propietario',
-            'procedencia',
-            'destino',
-            'horaDespegue',
-            'horaArribo',
-            'ruta',
-            'nroVuelo',
-            'obs',
-            'idControlador',
-            'nivel',
-            'eobt',
-            'destProcedencia',
-            'pistaProcedencia',
-            'calleProcedencia',
-            'destArribo',
-            'pistaArribo',
-            'calleArribo',
-            'estado'
+            'id', 'fecha', 'idAvion', 'modelo', 'propietario',
+            'procedencia', 'destino',  'horaDespegue', 'horaArribo',
+            'ruta', 'nroVuelo', 'obs', 'idControlador', 'nivel',
+            'eobt',  'destProcedencia', 'pistaProcedencia', 'calleProcedencia',
+            'destArribo', 'pistaArribo', 'calleArribo', 'estado'
             ],
             
         })
@@ -94,52 +60,22 @@ export const createMov = async (req: Request, res: Response) => {
     try {
         const {
             
-            fecha,
-            idAvion,
-            modelo,
-            propietario,
-            procedencia,
-            destino,
-            horaDespegue,
-            horaArribo,
-            ruta,
-            nroVuelo,
-            obs,
-            idControlador,
-            nivel,
-            eobt,
-            destProcedencia,
-            pistaProcedencia,
-            calleProcedencia,
-            destArribo,
-            pistaArribo,
-            calleArribo,
-            estado
+            fecha, idAvion, modelo, propietario,
+            procedencia,  destino, horaDespegue, horaArribo,
+            ruta, nroVuelo, obs, idControlador,
+            nivel, eobt, destProcedencia, pistaProcedencia,
+            calleProcedencia, destArribo, pistaArribo,
+            calleArribo, estado
         } = req.body;
         
         const mov = await Mov.create({
             
-            fecha,
-            idAvion,
-            modelo,
-            propietario,
-            procedencia,
-            destino,
-            horaDespegue,
-            horaArribo,
-            ruta,
-            nroVuelo,
-            obs,
-            idControlador,
-            nivel,
-            eobt,
-            destProcedencia,
-            pistaProcedencia,
-            calleProcedencia,
-            destArribo,
-            pistaArribo,
-            calleArribo,
-            estado
+            fecha, idAvion, modelo, propietario,
+            procedencia,  destino, horaDespegue, horaArribo,
+            ruta, nroVuelo, obs, idControlador,
+            nivel, eobt, destProcedencia, pistaProcedencia,
+            calleProcedencia, destArribo, pistaArribo,
+            calleArribo, estado
         });
 
         res.status(201).json({ id: mov.id });

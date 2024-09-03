@@ -4,16 +4,16 @@ import { crearMov } from "../servicioApi/MovService"
 import ErrorMensaje from "./ErrorMensaje"
 import { fpl } from "../types/FplServices"
 import { socket } from "../socket/coneccionSocket"
-import { ToastContainer, toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
 export async function action({ request }: ActionFunctionArgs) {
 
 
-  const f = await request.formData()
-  const data: { [key: string]: any } = {}
+  const f = await request.formData();
+  const data: { [key: string]: any } = {};
 
   f.forEach((value, key) => {
     data[key] = value;
@@ -25,78 +25,30 @@ export async function action({ request }: ActionFunctionArgs) {
   
   //await crearMov(data);
   const nuevoId = await crearMov(data);
-  console.log('desde el formulario', nuevoId);
   
-  
+console.log(nuevoId)
 
+socket.emit('enviarMov', {
+  id: socket.id,
+  idmov: nuevoId, 
+});
+
+toast.success('Se envió el vuelo', {
+  position: "top-right",
+  autoClose: 1000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+  theme: "dark",
+});
   
 //console.log(data) // muestra los datos q se capturaron del formulario
-  return redirect("/");
+  return redirect("/")
 }
 
 function FormMov() {
-
-  const [isConnected, setIsConnected] = useState(false);
-  const [nuevoMensaje, setNuevoMensaje] = useState('')
-
-
-  const [nuevoId, setNuevoId] = useState('')
-
-  
-  const manejarEnvioFormulario = async () => {
-    // Aquí manejas la lógica de envío del formulario y capturas el ID
-    const f = new FormData(); // Suponiendo que estás usando FormData
-    const data: Record<string, any> = {} // Convertir FormData a objeto
-
-    f.forEach((value, key) => {
-      data[key] = value;
-    });
-
-    const id = await crearMov(data);
-    if (id!== undefined) {
-      setNuevoId(id); // Actualizar el estado con el nuevo ID
-      console.log('ID del nuevo movimiento desde el componente:', nuevoId);
-    }
-  };
-
-  
-  
-
-
-
-  useEffect(() => {
-    socket.on('connect', () => setIsConnected(true));
-    socket.on('enviarMov', (data)=>{
-      console.log(data)
-    })
-    return () => {
-      socket.off('connect');
-      socket.off('enviarMov');
-    }
-  }, []);
-
-  const enviarMensaje = () =>{
-    socket.emit('enviarMov',{
-      id: socket.id,
-      mensaje:nuevoMensaje
-    })
-    toast.success('Se envió el vuelo', {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-    });
-  }
-
-
-
-
-
-
 
   const location = useLocation();
   const state = location.state as { selectedFpl?: fpl };
@@ -284,7 +236,7 @@ function FormMov() {
 
   return (
     <>
-      <h2>{isConnected ? 'conectado' : 'no conectado'}</h2>
+      
       <ToastContainer />
 
       {error && <ErrorMensaje mensaje={error} />}
@@ -699,7 +651,7 @@ function FormMov() {
               id="obs"
               name="obs"
               placeholder="observacion"
-              onChange={e => setNuevoMensaje(e.target.value)}
+              
             />
           </div>
 
@@ -709,7 +661,7 @@ function FormMov() {
           <div>
             <button 
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={enviarMensaje}
+            
             >
               REGISTRAR
             </button>

@@ -2,29 +2,47 @@ import { useState, useEffect } from "react"
 import React from "react"
 import { MdFlight } from "react-icons/md"
 import { socket } from "../socket/coneccionSocket"
+import { getMovById } from "../servicioApi/MovService";
 
 type Mensaje = {
-  usuario: string;
-  mensaje: string;
+  id: string
+  idmov: string
 };
 
 function NotMov() {
   
-  const [mensajes, setMensajes] = useState<Mensaje[]>([]);
-  const [unreadCount, setUnreadCount] = useState(0);
+  const [mensajes, setMensajes] = useState<Mensaje[]>([])
+  const [unreadCount, setUnreadCount] = useState(0)
+  const [registros, setRegistros] = useState<any[]>([]);
 
+  
   useEffect(() => {
-    socket.on("enviarMov", (data) => {
-      console.log(data, "desde el notMov")
+    socket.on("enviarMov", async(data) => {
       setMensajes((mensajes) => [...mensajes, data])
-      setUnreadCount((prevCount) => prevCount + 1)
-    })
 
+      if (data.idmov) {
+        try {
+          const registroData = await getMovById(data.idmov)
+          
+          
+          setRegistros((prevRegistros) => [...prevRegistros, registroData]);
+          
+          console.log('registro de mov por id', registroData)
+          
+        } catch (error) {
+          console.error("Error al obtener el registro:", error)
+        }
+      }
+
+      setUnreadCount((prevCount) => prevCount + 1)      
+      console.log(data, "desde el notMov", data.idmov)
+    })    
     return () => {
       socket.off("connect")
-      socket.off("chat_mensaje")
+      socket.off("enviarMov")
     }
   }, [])
+  
 
 
   const [isHovered, setIsHovered] = useState(false)
@@ -37,10 +55,10 @@ function NotMov() {
   }
 
   const handleRecibir = (index: number) => {
-    // Eliminar el mensaje del array
+    
     setMensajes((prevMensajes) => {
       const nuevosMensajes = [...prevMensajes]
-      nuevosMensajes.splice(index, 1); // Elimina el mensaje por índice
+      nuevosMensajes.splice(index, 1); 
       return nuevosMensajes;
     })
 
@@ -59,7 +77,7 @@ function NotMov() {
             style={{ zIndex: 20 }}
           />
           <span className="notification">{unreadCount}</span>{" "}
-          {/* Aquí está la notificación */}
+          
         </div>
 
         {isHovered && (
@@ -80,11 +98,11 @@ function NotMov() {
                 </tr>
               </thead>
               <tbody>
-                {mensajes.map((mensaje, index) => (
+                {registros.map((registro, index) => (
                   <tr key={index}>
-                    <td className="px-4 py-2">{mensaje.usuario}</td>
-                    <td className="px-4 py-2">{mensaje.mensaje}</td>
-                    <td className="px-4 py-2">{mensaje.mensaje}</td>
+                    <td className="px-4 py-2">{registro.destArribo}</td>
+                    <td className="px-4 py-2">{registro.calleProcedencia}</td>
+                    <td className="px-4 py-2">{registro.destArribo}</td>
                     <td className="px-4 py-2">
                       <button
                         className="bg-red-500 text-white px-4 py-2 rounded"

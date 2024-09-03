@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { getFpl, fplBuscar } from '../servicioApi/FplService';
-import styled from "styled-components";
-import { useLoaderData, useNavigate } from 'react-router-dom';
-import FplDetalles from './FplDetalles';
-import ReactPaginate from 'react-paginate';
-import { fpl } from '../types/FplServices';
+import { getFpl, fplBuscar } from '../servicioApi/FplService'
+import styled from "styled-components"
+import { useLoaderData, useNavigate } from 'react-router-dom'
+import FplDetalles from './FplDetalles'
+import ReactPaginate from 'react-paginate'
+import { fpl } from '../types/FplServices'
  
 
 
@@ -19,8 +19,8 @@ const ITEMS_PER_PAGE = 8
 export default function TablaFpl() {
     const initialFpls  = useLoaderData() as fpl[]
     const [fpls, setFpls] = useState<fpl[]>(initialFpls)
-    const [currentPage, setCurrentPage] = useState(0);
-    const [searchTerm, setSearchTerm] = useState("");
+    const [currentPage, setCurrentPage] = useState(0)
+    const [searchTerm, setSearchTerm] = useState("")
 
     
     
@@ -29,24 +29,24 @@ export default function TablaFpl() {
 
     
     const handlePageClick = (event: { selected: number }) => {
-        setCurrentPage(event.selected);
+        setCurrentPage(event.selected)
     };
-    const offset = currentPage * ITEMS_PER_PAGE;
-    const currentItems = fpls.slice(offset, offset + ITEMS_PER_PAGE);
-    const pageCount = Math.ceil(fpls.length / ITEMS_PER_PAGE);
+    const offset = currentPage * ITEMS_PER_PAGE
+    const currentItems = fpls.slice(offset, offset + ITEMS_PER_PAGE)
+    const pageCount = Math.ceil(fpls.length / ITEMS_PER_PAGE)
 
     const handleSelect = (selectedFpl: fpl) => {
      //console.log('Registro seleccionado en TablaFpl:', selectedFpl);
-      setSelectedFpl(selectedFpl);
+      setSelectedFpl(selectedFpl)
         
-      navigate('/', { state: { selectedFpl } });
+      navigate('/', { state: { selectedFpl } })
   }
 
   const handleSelectClick = async () => {
     const result = await fplBuscar(searchTerm);
     if (result) {
-        setFpls(result); // Actualiza los FPLs con los resultados de la búsqueda
-        setCurrentPage(0); // Reinicia la paginación a la primera página
+        setFpls(result)
+        setCurrentPage(0)
     }
 };
 
@@ -77,8 +77,8 @@ export default function TablaFpl() {
         <input
             type="search"
             id="search"
-            value={searchTerm} // Añadir el valor
-            onChange={(e) => setSearchTerm(e.target.value)} // Capturar cambios
+            value={searchTerm} 
+            onChange={(e) => setSearchTerm(e.target.value)} 
             className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="MATRICULA O NRO DE VUELO"
             required
