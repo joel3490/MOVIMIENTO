@@ -18,9 +18,11 @@ export async function getFpl() {
     }
 }
 
+
+
 export async function fplBuscar (searchTerm: string) {
     
-    console.log('Valor de búsqueda:', searchTerm);
+    //console.log('Valor de búsqueda:', searchTerm);
     try {
         let url: string;
         if (!searchTerm.trim()) {

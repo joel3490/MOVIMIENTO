@@ -6,70 +6,27 @@ import { fpl } from "../types/FplServices"
 import { socket } from "../socket/coneccionSocket"
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { validarCampos } from "../types/MovServices"
 
 
 
 export async function action({ request }: ActionFunctionArgs) {
-
-
-  const f = await request.formData()
-  const data: { [key: string]: any } = {}
-
+  
+  
+  const f = await request.formData();
+  const data: { [key: string]: any } = {};
+  
   f.forEach((value, key) => {
     data[key] = value;
   });
-
-
-
-  //console.log(data) para ver q llegue los datos hasta ahi
+  
+  const validationError = validarCampos(data);
   
   //await crearMov(data);
-  const nuevoId = await crearMov(data);
-  console.log('desde el formulario', nuevoId);
-
-  socket.emit('enviarMov', {
-    id: socket.id,
-    idmov: nuevoId, 
-  });
-  
-  toast.success('Se envió el vuelo', {
-    position: "top-right",
-    autoClose: 1000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: "dark",
-  });
-  
-//console.log(data) // muestra los datos q se capturaron del formulario
-  return redirect("/");
-}
-
-function FormMov() {
-
-  const [isConnected, setIsConnected] = useState(false);
-  const [nuevoMensaje, setNuevoMensaje] = useState('')
-
-
-  useEffect(() => {
-    socket.on('connect', () => setIsConnected(true));
-    socket.on('enviarMov', (data)=>{
-      console.log(data)
-    })
-    return () => {
-      socket.off('connect');
-      socket.off('enviarMov');
-    }
-  }, []);
-
-  const enviarMensaje = () =>{
-    socket.emit('enviarMov',{
-      id: socket.id,
-      mensaje:nuevoMensaje
-    })
-    toast.success('Se envió el vuelo', {
+  // const nuevoId = await crearMov(data);
+  if (validationError) {
+    
+    toast.error(validationError, {
       position: "top-right",
       autoClose: 2000,
       hideProgressBar: false,
@@ -79,7 +36,57 @@ function FormMov() {
       progress: undefined,
       theme: "dark",
     });
+    return null
   }
+
+  try {
+    const nuevoId = await crearMov(data);
+
+    socket.emit('enviarMov', {
+      id: socket.id,
+      idmov: nuevoId,
+    });
+
+    toast.success('Se envió el vuelo', {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+
+    return redirect("/mov");
+  } catch (error) {
+    
+    toast.error('Ocurrió un error al crear el movimiento.', {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
+    return null;
+  }
+
+  //console.log(data) para ver q llegue los datos hasta ahi
+  
+
+  //console.log('desde el formulario', nuevoId);
+
+  
+}
+
+
+
+
+
+function FormMov() {
 
   const location = useLocation();
   const state = location.state as { selectedFpl?: fpl };
@@ -267,7 +274,7 @@ function FormMov() {
 
   return (
     <>
-      <h2>{isConnected ? 'conectado' : 'no conectado'}</h2>
+      
       <ToastContainer />
 
       {error && <ErrorMensaje mensaje={error} />}
@@ -580,29 +587,7 @@ function FormMov() {
             />
           </div>
           <div className="w-full md:w-1/2 px-3">
-            <label
-              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-1"
-              htmlFor="horaArribo"
-            >
-              HORA ARRIBO
-            </label>
-            <input
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-              type="time"
-              id="horaArribo"
-              name="horaArribo"
-              value={c7Part2}
-              onChange={(e) => setc7Part2(e.target.value)}
-            />
-          </div>
-        </div>
-
-
-
-
-        <div className="flex flex-wrap -mx-3 mb-1">
-          <div className="w-full md:w-1/3 px-3">
-            <label
+          <label
               className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-1"
               htmlFor="destArribo"
             >
@@ -619,70 +604,42 @@ function FormMov() {
 
             />
           </div>
-          <div className="w-full md:w-1/3 px-3 mb-1 md:mb-0">
-            <label
-              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-1"
-              htmlFor="pistaArribo"
-            >
-              RWY
-            </label>
-            <input
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-              type="text"
-              id="pistaArribo"
-              name="pistaArribo"
-              
-              placeholder="pista"
-            />
-          </div>
-          <div className="w-full md:w-1/3 px-3">
-            <label
-              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-1"
-              htmlFor="calleArribo"
-            >
-              TWY
-            </label>
-            <input
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-              type="text"
-              id="calleArribo"
-              name="calleArribo"
-              
-              placeholder="c. rodaje"
-            />
-          </div>
         </div>
+
+
+
+
 
         <div className="flex flex-wrap -mx-3 mb-1">
           <div className="w-full md:w-1/3 px-3">
             <label
               className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-1"
-              htmlFor="idControlador"
+              htmlFor="idControladorPro"
             >
               CONTROLADOR
             </label>
             <input
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               type="text"
-              id="idControlador"
-              name="idControlador"
+              id="idControladorPro"
+              name="idControladorPro"
               placeholder="controlador"
             />
           </div>
           <div className="w-full md:w-1/2 px-3 mb-1 md:mb-0">
             <label
               className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-1"
-              htmlFor="obs"
+              htmlFor="obsProcedencia"
             >
               OBSERVACION
             </label>
             <input
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               type="text"
-              id="obs"
-              name="obs"
+              id="obsProcedencia"
+              name="obsProcedencia"
               placeholder="observacion"
-              onChange={e => setNuevoMensaje(e.target.value)}
+              
             />
           </div>
 
@@ -692,7 +649,7 @@ function FormMov() {
           <div>
             <button 
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={enviarMensaje}
+            
             >
               REGISTRAR
             </button>
@@ -707,4 +664,4 @@ function FormMov() {
     </>
   );
 }
-export default FormMov;
+export default FormMov

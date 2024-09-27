@@ -79,13 +79,25 @@ class Mov extends Model {
         type: DataType.STRING,
         allowNull: true,
     })
-    declare obs?: string;
+    declare obsProcedencia: string;
 
     @Column({
         type: DataType.STRING,
         allowNull: false,
     })
-    declare idControlador: string;
+    declare idControladorPro: string;
+
+    @Column({
+        type: DataType.STRING,
+        allowNull: true,
+    })
+    declare obsArribo: string;
+
+    @Column({
+        type: DataType.STRING,
+        allowNull: true,
+    })
+    declare idControladorArr: string;
 
     @Column({
         type: DataType.INTEGER,

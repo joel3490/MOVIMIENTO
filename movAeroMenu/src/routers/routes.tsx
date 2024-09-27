@@ -1,9 +1,11 @@
 import { createBrowserRouter, LoaderFunctionArgs  } from "react-router-dom";
-import { Home } from "../pages/Home";
-import { Estadisticas } from "../pages/Estadisticas";
-import { Productos } from "../pages/Productos";
-import {Diagramas} from "../pages/Diagramas";
-import {Reportes} from "../pages/Reportes";
+import AuthLayout  from "../layouts/authLayout";
+import Login from "../auth/Login"
+import { Home } from "../paginas/Home";
+import { Estadisticas } from "../paginas/Estadisticas";
+import { Productos } from "../paginas/Productos";
+import {Diagramas} from "../paginas/Diagramas";
+import {Reportes} from "../paginas/Reportes";
 import React from "react";
 import Layout from "../layouts/Layout";
 import { action as createMov } from "../components/formMov";
@@ -22,8 +24,22 @@ export const combinedLoader = async (args: LoaderFunctionArgs) => {
 
 export const router = createBrowserRouter([
   {
-    path: '/',
-    element:<Layout/>,
+    
+    element: <AuthLayout />,
+    children: [
+      {                
+        path: '/',
+        element: <Login />,
+      },
+      {
+        //path: 'register',
+        //element: <Register />,
+      }
+    ]
+  },
+  {    
+    path: '/mov',
+    element:<Layout />,
     children:[
       {
         index: true,
@@ -43,6 +59,8 @@ export const router = createBrowserRouter([
         path: 'fpl/',
         element:<Reportes/>
       }
-    ]
+    ]    
   }
+  
 ])
+

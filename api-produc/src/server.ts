@@ -3,6 +3,7 @@ import cors, { CorsOptions } from 'cors'
 import routerProduct from './routers/routerProduct'
 import routeFpl from './routers/routeFpl'
 import routeMov from './routers/routeMov'
+import routeAuth from './routers/routeAuth'
 import db from './config/db'
 import color from 'colours'
 import morgan from 'morgan'
@@ -47,6 +48,7 @@ import morgan from 'morgan'
 serverMov.use('/api/products', routerProduct)
 serverMov.use('/fpl', routeFpl)
 serverMov.use('/mov', routeMov)
+serverMov.use('/auth', routeAuth)
 
 
 

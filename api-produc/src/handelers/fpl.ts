@@ -1,5 +1,4 @@
-// desde la carperta de handlers
-import {Request, Response} from 'express'// para auto completado de res y req
+import {Request, Response} from 'express'
 import Fpl from '../models/Fpl.model'
 import { Op } from 'sequelize';
 
