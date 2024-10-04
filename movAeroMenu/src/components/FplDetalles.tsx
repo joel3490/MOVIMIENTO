@@ -63,6 +63,12 @@ export default function FplDetalles({ fpls, onSelect }: FplsDetalleProps) {
                                 <h3 className="font-semibold text-gray-900 dark:text-white">Registro</h3>
                             </div>
                             <div className="px-3 py-2">
+                            {fpls.c2}
+                                <br />
+                                <br />
+                                {fpls.c4}
+                                <br />
+                                <br />
                                 {fpls.c6}
                                 <br />
                                 <br />

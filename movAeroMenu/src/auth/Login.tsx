@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { MdVisibility, MdOutlineVisibilityOff } from "react-icons/md";
-import { login } from '../servicioApi/MovService'
+import { login } from '../servicioApi/AuthService'
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify'
-
-
 
 function Login() {
 
@@ -35,23 +33,9 @@ function Login() {
           progress: undefined,
           theme: "dark",
         });
-      }
-      
-      console.log('Respuesta del servidor y token:', response) // respuesta para el token de autentificacion
-      //const token = response.data
-      const token = response.token || response.data || null
-
-      localStorage.setItem('token', token)
-      
-      
-       console.log(token)
-      const storedToken = localStorage.getItem('token');
-      console.log(storedToken)
-      if (storedToken) {
-        console.log('Token almacenado:', storedToken);
-      } else {
-        console.log('No se encontró el token en el localStorage');
-      }
+      }      
+      //console.log('Respuesta del servidor y token:', response) // respuesta para el token de autentificacion
+      //const token = response.data     
 
       navigate('/mov')
 

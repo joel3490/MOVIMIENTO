@@ -116,6 +116,7 @@ export const createMov = async (req: Request, res: Response) => {
         });
 
         res.status(201).json({ id: mov.id });
+        //console.log(req.aerouser)
         // console.log (mov.id)
     } catch (error) {
         console.log(error);

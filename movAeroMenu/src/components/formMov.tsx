@@ -451,7 +451,7 @@ function FormMov() {
               className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
               htmlFor="ruta"
             >
-              RUTA
+              SID / RUTA
             </label>
             <textarea
               className="resize-y rounded-y h-10 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"

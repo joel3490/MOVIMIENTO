@@ -5,8 +5,6 @@ import aeroUser from "../models/aeroUser.model"
 
 import jwt from 'jsonwebtoken'
 
-
-
 export class auth {
 
     static login = async (req: Request, res: Response) => {
@@ -16,8 +14,7 @@ export class auth {
             const user = await aeroUser.findOne({ 
                 where: { id_oaci } ,
                 attributes: ['id_oaci', 'password'],                
-              })
-              
+              })              
             if (!user) {
                 const error = new Error('Usuario no encontrado')
                 return res.status(404).json({error: error.message})
@@ -28,17 +25,17 @@ export class auth {
             //console.log(verificar)
            if (!verificar) {
                return res.status(401).json({ error: 'Contraseña incorrecta' })
-           }           
-           
-           
-           
+           }          
            const token = jwt.sign(
             { id_oaci: user.id_oaci },  
             process.env.JWT_SECRET as string,                      
             { expiresIn: '180d' }                         
             );
             res.send(token)
-            console.log(token)           
+            console.log(token)   
+            console.log('JWT_SECRET:', process.env.JWT_SECRET);  
+            
+            
            //return res.status(200).json({ message: 'Login exitoso' })  
         }
         catch (error: any) {
@@ -68,6 +65,11 @@ export class auth {
                 res.status(500).json({ error: 'Error al crear el usuario' });
             }
         }
+    }
+
+
+    static aerouser = async (req: Request, res: Response) => {
+        return res.json(req.aerouser)
     }
 
     

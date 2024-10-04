@@ -4,9 +4,19 @@ import axios from "axios"
 
 
 export async function getFpl() {
+
+    const token = localStorage.getItem('auth_token')
+    
+
     try {
         const url = `${import.meta.env.VITE_API_URL}/fpl`
-        const {data} = await axios(url)
+        const { data } = await axios.get(url, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        
+        
         const result = safeParse(FplsSchema, data.data)
         if (result.success){
             return result.output
@@ -21,6 +31,7 @@ export async function getFpl() {
 
 
 export async function fplBuscar (searchTerm: string) {
+    const token = localStorage.getItem('auth_token')
     
     //console.log('Valor de búsqueda:', searchTerm);
     try {
@@ -33,7 +44,11 @@ export async function fplBuscar (searchTerm: string) {
             url = `${import.meta.env.VITE_API_URL}/fpl/search?fplBuscar=${encodeURIComponent(searchTerm)}`;
         }
         // Realiza la solicitud GET
-        const { data } = await axios.get(url);
+        const { data } = await axios.get(url, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
         
         // Muestra los datos recibidos en la consola
         console.log('Resultado de la búsqueda:', data)

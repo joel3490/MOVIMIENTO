@@ -1,6 +1,5 @@
 import express from 'express'
 import cors, { CorsOptions } from 'cors'
-import routerProduct from './routers/routerProduct'
 import routeFpl from './routers/routeFpl'
 import routeMov from './routers/routeMov'
 import routeAuth from './routers/routeAuth'
@@ -45,7 +44,7 @@ import morgan from 'morgan'
 
 
 //es como la url padre 
-serverMov.use('/api/products', routerProduct)
+
 serverMov.use('/fpl', routeFpl)
 serverMov.use('/mov', routeMov)
 serverMov.use('/auth', routeAuth)

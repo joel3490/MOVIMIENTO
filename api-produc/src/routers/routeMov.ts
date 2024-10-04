@@ -2,10 +2,12 @@ import {Router} from 'express'
 import {body, param} from 'express-validator'
 import { handleInputErrors } from '../middleware'
 import { createMov, getMov, getMovById, updateMov } from '../handelers/mov'
+import { autorizacion } from '../middleware/Auth'
 
 const router = Router()
 
 router.post('/crearMov',
+  autorizacion,
     body('fecha').notEmpty().withMessage('el nombre no debe ser campo vacio'),
     body('idAvion').notEmpty().withMessage('el nombre no debe ser campo vacio'),
     body('modelo').notEmpty().withMessage('el nombre no debe ser campo vacio'),
@@ -33,11 +35,16 @@ router.post('/crearMov',
     createMov
 );
 
-router.get('/', getMov)
+router.get('/', 
+  autorizacion,
+  getMov)
 
-router.put('/:id', updateMov)
+router.put('/:id', 
+  autorizacion,
+  updateMov)
 
 router.get('/:id', 
+  autorizacion,
   param('id').isInt().withMessage('id no valido'),
   handleInputErrors,
   getMovById  

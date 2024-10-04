@@ -18,7 +18,7 @@ export function Home() {
         <FechaHora />
 
       </div>
-      <div className="-mt-9" >
+      <div className="-mt-8 absolute right-0 mr-32" >
         <NotMov />
       </div>
     </div>

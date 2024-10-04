@@ -5,36 +5,11 @@ import axios from "axios"
 type MovData = {
     [k: string]: FormDataEntryValue
 }
-type LoginData = {
-  id_oaci: string;
-  password: string;
-};
 
-export async function login(data: LoginData) {
-  try {
-    const url = `${import.meta.env.VITE_API_URL}/auth/login`; 
-    const response = await axios.post(url, data);
-    
-    
-    if (response.status === 200) {
-      console.log('Login exitoso:', response.data);
-      return response.data;  
-    } else {
-      throw new Error('Login fallido');
-    }
-  } catch (error: any) {
-    if (error.response) {
-      console.error('Error en el servidor:', error.response.data);
-    } else if (error.request) {
-      console.error('No se recibió respuesta del servidor:', error.request);
-    } else {
-      console.error('Error:', error.message);
-    }
-    throw error;  
-  }
-}
 
 export async function crearMov(data: MovData) {
+  const token = localStorage.getItem('auth_token')
+  
   try {
     const error = validarCampos(data)
     if (error) {
@@ -46,7 +21,11 @@ export async function crearMov(data: MovData) {
     console.log(result)
     if (result.success) {
       const url = `${import.meta.env.VITE_API_URL}/mov/crearMov`
-      const response= await axios.post(url, result.output)
+      const response= await axios.post(url, result.output, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
       const nuevoId = response.data.id;
       //console.log('ID del nuevo movimiento desde el servicio:', nuevoId);
       return nuevoId
@@ -65,9 +44,15 @@ export async function crearMov(data: MovData) {
 }
 
 export async function updateMov(id: string, data: MovData) {
+  const token = localStorage.getItem('auth_token')
+    
   try {
     const url = `${import.meta.env.VITE_API_URL}/mov/${id}`
-    const response = await axios.put(url, data)
+    const response = await axios.put(url, data, {
+      headers: {
+          Authorization: `Bearer ${token}`
+      }
+  })
     console.log('Actualización exitosa:', response.data)
     return response.data
   } catch (error: any) {
@@ -81,9 +66,15 @@ export async function updateMov(id: string, data: MovData) {
 }
 
 export async function getMovById(id: string) {
+  const token = localStorage.getItem('auth_token')
+    
   try {
       const url = `${import.meta.env.VITE_API_URL}/mov/${id}` 
-      const { data } = await axios.get(url)
+      const { data } = await axios.get(url, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
       console.log(data)
       return data
   } catch (error: any) {
@@ -97,9 +88,15 @@ export async function getMovById(id: string) {
 }
 
 export async function getMov() {
+  const token = localStorage.getItem('auth_token')
+    
     try {
         const url = `${import.meta.env.VITE_API_URL}/mov`
-        const {data} = await axios(url)
+        const {data} = await axios(url, {
+          headers: {
+              Authorization: `Bearer ${token}`
+          }
+      })
         console.log(data)
     } catch (error) {
         
