@@ -34,17 +34,14 @@ function NotMov() {
   const [mensajes, setMensajes] = useState<Mensaje[]>([])
   const [unreadCount, setUnreadCount] = useState(0)
   const [registros, setRegistros] = useState<Registro[]>([])
-
-
-
   useEffect(() => {
     socket.on("enviarMov", async (data) => {
       setMensajes((mensajes) => [...mensajes, data])
+      localStorage.setItem('notificaciones', JSON.stringify([...mensajes, data]));
 
       if (data.idmov) {
         try {
           const registroData = await getMovById(data.idmov)
-
 
           setRegistros((prevRegistros) => [...prevRegistros, registroData.data]);
 
@@ -54,7 +51,6 @@ function NotMov() {
           console.error("Error al obtener el registro:", error)
         }
       }
-
       setUnreadCount((prevCount) => prevCount + 1)
       console.log(data, "desde el notMov", data.idmov)
     })
@@ -63,8 +59,7 @@ function NotMov() {
       socket.off("enviarMov")
     }
   }, [])
-
-
+  
 
   const [isHovered, setIsHovered] = useState(false)
   const handleMouseEnter = () => {
@@ -83,7 +78,6 @@ function NotMov() {
       return nuevosMensajes;
     })
 
-
     setUnreadCount((prevCount) => Math.max(prevCount - 1, 0))
   }
 
@@ -99,9 +93,6 @@ function NotMov() {
     setIsModalOpen(false);
     setSelectedRegistro(null);
   }
-
-
-
 
   const [horaArribo, setHoraArribo] = useState('');
   const [pistaArribo, setPistaArribo] = useState('');
@@ -132,9 +123,6 @@ function NotMov() {
           });
         }
         setRegistros((prevRegistros) => prevRegistros.filter((registro) => registro.id !== selectedRegistro.id))
-
-
-
         setPistaArribo("");
         setCalleArribo("");
         setIdControladorArr("");
@@ -146,8 +134,6 @@ function NotMov() {
       }
     }
   }
-
-
   //capturar hora  
   useEffect(() => {
     const obtenerHoraActual = () => {
@@ -163,11 +149,6 @@ function NotMov() {
   const manejarCambioHora = (event: React.ChangeEvent<HTMLInputElement>) => {
     setHoraArribo(event.target.value);
   }
-
-
-
-
-
   return (
     <>
       <div className="flex justify-end relative pr-10">
@@ -189,8 +170,6 @@ function NotMov() {
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             style={{ zIndex: 30 }}
-
-
           >
             <table className="w-full table-auto">
               <thead>
@@ -240,8 +219,6 @@ function NotMov() {
               </div>
               <div className="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all max-w-4xl w-full p-6">
                 <h2 className="text-lg font-medium text-gray-900 mb-4">Progreso de Vulo</h2>
-
-
                 <div className="p-5">
                   <table className="w-full table-auto">
                     <thead>
@@ -268,8 +245,6 @@ function NotMov() {
                     </tbody>
                   </table>
                   <br />
-
-
                   <div>
                     <div className="flex flex-wrap -mx-3 mb-1">
                       <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
@@ -286,9 +261,6 @@ function NotMov() {
                           name="destino"
                           placeholder="destino"
                           defaultValue={selectedRegistro?.destino}
-
-
-
                         />
                       </div>
                       <div className="w-full md:w-1/2 px-3">
@@ -386,13 +358,7 @@ function NotMov() {
 
                   </div>{/*fin div forulario*/}
                 </div>{/* fin de la tabla*/}
-
-
-
-
-
                 <br />
-
                 <div className="flex justify-end">
                   <button
                     className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mr-2"
@@ -414,11 +380,8 @@ function NotMov() {
             </div>
           </div>
         )}
-
-
       </div>
     </>
   );
 }
-
 export default NotMov;
