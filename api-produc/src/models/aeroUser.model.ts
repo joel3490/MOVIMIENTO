@@ -40,6 +40,12 @@ class aeroUser extends Model{
     })
     declare regional: String
 
+    @Column({
+        type: DataType.BOOLEAN(),
+        allowNull: true,
+    })
+    declare online: boolean
+
           
 }
 

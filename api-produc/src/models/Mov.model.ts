@@ -2,9 +2,7 @@ import { Table, Column, Model, DataType, PrimaryKey, AutoIncrement } from 'seque
 
 @Table({
     tableName: 'movs',
-    timestamps: true,
-    createdAt: 'created_at',
-    updatedAt: 'updated_at'
+    timestamps: true
 })
 class Mov extends Model {
     @PrimaryKey
@@ -153,17 +151,6 @@ class Mov extends Model {
     })
     declare estado: string;
     
-    @Column({
-        type: DataType.DATE,
-        allowNull: true,
-    })
-    declare created_at: Date;
-
-    @Column({
-        type: DataType.DATE,
-        allowNull: true,
-    })
-    declare updated_at: Date;
-}
+    }
 
 export default Mov;
