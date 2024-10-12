@@ -8,8 +8,7 @@ type LoginData = {
 export async function login(data: LoginData) {
   try {
     const url = `${import.meta.env.VITE_API_URL}/auth/login`; 
-    const response = await axios.post(url, data);
-    
+    const response = await axios.post(url, data);    
     
     if (response.status === 200) {
       //console.log('Login exitoso:', response.data);
@@ -31,8 +30,6 @@ export async function login(data: LoginData) {
   }
 }
 
-
-
 export async function getAerouser() {
   
   const token = localStorage.getItem('auth_token')
@@ -42,9 +39,9 @@ export async function getAerouser() {
       headers: {
           Authorization: `Bearer ${token}`
       }
-  });
-    
+  });    
     console.log(response) 
+    //console.log(token)
     return response  
     
   } catch (error: any) {

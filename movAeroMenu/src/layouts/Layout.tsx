@@ -52,13 +52,13 @@ export default function Layout() {
             <li className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
               <MdFlightTakeoff className="w-10 h-10 text-slate-600" />
               <Link to="/mov" className={`flex-1 ms-3 whitespace-nowrap ${isSidebarOpen ? 'block' : 'hidden'}`}>
-                MOVIMIENTO
+                REGISTRO DEL MOV
               </Link>
             </li>
             <li className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
               <MdFactCheck className="w-10 h-10 text-slate-600" />
               <Link to="form004/" className={`flex-1 ms-3 whitespace-nowrap ${isSidebarOpen ? 'block' : 'hidden'}`}>
-                FORM 004
+                MOV EN LINEA
               </Link>
             </li>
             <li className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">

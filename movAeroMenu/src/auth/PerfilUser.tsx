@@ -1,18 +1,18 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import {  MdHelp   } from "react-icons/md";
+import { MdHelp } from "react-icons/md";
 import { getAerouser } from "../servicioApi/AuthService"
 import { useNavigate } from "react-router-dom";
 
 const ProfileMenu: React.FC = () => {
 
   const { data, isError, isLoading } = useQuery({
-    queryKey: ['id_oaci'],  
-    queryFn: getAerouser,  
-    retry: 1,  
-    refetchOnWindowFocus: true 
+    queryKey: ['id_oaci'],
+    queryFn: getAerouser,
+    retry: 1,
+    refetchOnWindowFocus: true
   });
-  
+
   const [isHovered, setIsHovered] = useState(false);
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -21,13 +21,13 @@ const ProfileMenu: React.FC = () => {
   const handleMouseLeave = () => {
     setIsHovered(false);
   }
-  
+
   const queryClient = useQueryClient()
   const navigate = useNavigate()
 
   const logout = () => {
     localStorage.removeItem('auth_token')
-    queryClient.invalidateQueries({queryKey:['user']})
+    queryClient.invalidateQueries({ queryKey: ['user'] })
     navigate('/')
   }
 
@@ -36,11 +36,9 @@ const ProfileMenu: React.FC = () => {
 
       <div className="relative inline-flex items-center justify-center w-16 h-16   overflow-hidden bg-gray-300 rounded-full dark:bg-gray-800">
         <span className="font-medium text-gray-600 dark:text-gray-300 text-2xl" >{data?.data?.id_oaci}</span>
-        
-    </div>
+      </div>
 
-    
-    <div className="font-medium dark:text-white">
+      <div className="font-medium dark:text-white">
         <div>{data?.data?.aeropuerto}</div>
       </div>
 
@@ -60,9 +58,7 @@ const ProfileMenu: React.FC = () => {
             className="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100"
           >
             <p className="text-slate-800 font-medium ml-2">{data?.data?.nombre}</p>
-            
           </li>
-          
           <button
             type="button"
             className="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100"

@@ -2,7 +2,6 @@ import { createBrowserRouter, LoaderFunctionArgs  } from "react-router-dom";
 import AuthLayout  from "../layouts/authLayout";
 import Login from "../auth/Login"
 import { Home } from "../paginas/Home";
-import { Estadisticas } from "../paginas/Estadisticas";
 import { Productos } from "../paginas/Productos";
 import {Diagramas} from "../paginas/Diagramas";
 import {Reportes} from "../paginas/Reportes";
@@ -11,6 +10,7 @@ import Layout from "../layouts/Layout";
 import { action as createMov } from "../components/formMov";
 import {loader as fplLoader} from '../components/TablaFpl'
 import { loader as movLoader } from "../components/TablaMov";
+import { ListaAero } from "../paginas/ListaAero";
 
 export const combinedLoader = async (args: LoaderFunctionArgs) => {
   //const fplData = await fplLoader(args);
@@ -49,7 +49,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'form004/',
-        element:<Estadisticas/>
+        element:<ListaAero/>
       },
       {
         path: 'form006/',

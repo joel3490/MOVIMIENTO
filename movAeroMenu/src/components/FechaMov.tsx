@@ -10,7 +10,6 @@ export const FechaHora = () => {
         setFechaHora(new Date());
       }, 1000);
   
-      // Cleanup del intervalo cuando el componente se desmonta
       return () => {
         clearInterval(timerID);
       };
