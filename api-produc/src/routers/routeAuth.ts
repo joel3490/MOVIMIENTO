@@ -7,7 +7,7 @@ const router = Router()
 
 
 router.post('/create-account',
-    autorizacion,
+    //autorizacion,
     
     body('id_oaci').notEmpty().withMessage('el aeroùertp no debe ser vacio'),
     body('password').isLength({min:4}).withMessage('la contraseña debe ser 4 caracteres'),

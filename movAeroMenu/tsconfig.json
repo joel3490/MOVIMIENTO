@@ -21,6 +21,6 @@
       "*": ["src/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "env.d.ts"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "env.d.ts", "src/components/SocketContext.tsx", "src/socket/useSocket.ts"],
   "exclude": ["node_modules"]
 }

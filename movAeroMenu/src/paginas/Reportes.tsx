@@ -1,10 +1,16 @@
 import styled from "styled-components";
 import React from "react";
+import { Prueba } from "../components/ConexionSocket";
 export function Reportes() {
-  return (<Container>
-<h1>Reportes</h1>
-  </Container>);
+  return (
+  
+  <>
+  
+    <Prueba/>
+    <h1>reportes</h1>
+  </>
+  
+);
 }
-const Container =styled.div`
-   height:100vh;
-`
+
+

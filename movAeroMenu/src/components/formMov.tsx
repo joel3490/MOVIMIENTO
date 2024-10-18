@@ -7,6 +7,7 @@ import { socket } from "../socket/coneccionSocket"
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { validarCampos } from "../types/MovServices"
+import { Prueba } from "./ConexionSocket"
 
 
 
@@ -275,6 +276,8 @@ function FormMov() {
   return (
     <>
       
+      <Prueba />
+
       <ToastContainer />
 
       {error && <ErrorMensaje mensaje={error} />}

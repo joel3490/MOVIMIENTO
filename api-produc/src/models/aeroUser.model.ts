@@ -42,7 +42,7 @@ class aeroUser extends Model{
 
     @Column({
         type: DataType.BOOLEAN(),
-        allowNull: true,
+        defaultValue: false,
     })
     declare online: boolean
 

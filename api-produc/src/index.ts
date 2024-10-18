@@ -10,6 +10,9 @@ const io = require  ('socket.io')(server, {
 })
 
 io.on('connection', (socket)=>{
+
+
+    
     console.log('se conecto un cliente'); 
     
     socket.on('enviarMov',(data)=>{
@@ -17,6 +20,13 @@ io.on('connection', (socket)=>{
         socket.broadcast.emit('enviarMov', data)
         //io.emit('enviarMov', data) //para q llegue el dato para quien envia tambien
     })
+
+
+
+
+    socket.on('disconnect', () => {
+        console.log('Cliente desconectado');
+    });
     
 })
 

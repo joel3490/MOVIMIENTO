@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdHelp } from "react-icons/md";
 import { getAerouser } from "../servicioApi/AuthService"
 import { useNavigate } from "react-router-dom";
@@ -12,6 +12,9 @@ const ProfileMenu: React.FC = () => {
     retry: 1,
     refetchOnWindowFocus: true
   });
+
+  
+
 
   const [isHovered, setIsHovered] = useState(false);
   const handleMouseEnter = () => {
