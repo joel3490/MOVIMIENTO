@@ -3,31 +3,8 @@ import React from "react"
 import { MdFlight } from "react-icons/md"
 import { socket } from "../socket/coneccionSocket"
 import { getMovById, updateMov } from "../servicioApi/MovService";
+import { Mensaje, Registro } from "../types/MovServices";
 
-type Mensaje = {
-  id: string
-  idmov: string
-};
-
-interface Registro {
-
-  id: string
-  procedencia: string
-  idAvion: string
-  idControladorArr: string
-  idControladorPro: string
-  obsArribo: string
-  nroVuelo: string
-  propietario: string
-  horaDespegue: string
-  modelo: string
-  horaArribo: string
-  destProcedencia: string
-  destino: string
-  destArribo: string
-  calleArribo: string
-  pistaArribo: string
-}
 
 function NotMov() {
 

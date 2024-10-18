@@ -1,11 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Fpls } from '../types/FplServices';
+import { useState, useRef, useEffect } from 'react';
+import { FplsDetalleProps } from '../types/FplServices';
 
-type FplsDetalleProps = {
-    fpls: Fpls
-    index: number    
-  onSelect: (fpl: Fpls) => void;
-};
+
 
 export default function FplDetalles({ fpls, onSelect }: FplsDetalleProps) {
     const [isOpen, setIsOpen] = useState(false)
@@ -40,7 +36,7 @@ export default function FplDetalles({ fpls, onSelect }: FplsDetalleProps) {
     const handleSelectClick = () => {
         
     //console.log('Registro seleccionado:', fpls);
-        // Aquí puedes manejar los datos como quieras, por ejemplo, guardarlos en un estado o enviarlos a un servicio
+       
         onSelect (fpls)
     }
 

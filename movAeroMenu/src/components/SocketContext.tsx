@@ -1,26 +1,25 @@
 // SocketContext.tsx
-import React, { createContext, ReactNode, useContext } from 'react';
+import React, { createContext, useContext, useEffect } from 'react';
 import { useSocket } from '../socket/useSocket'; 
-import { Socket } from 'socket.io-client'; 
+import { SocketContextProps, SocketProviderProps } from '../types/SocketServices';
 
-
-interface SocketContextProps {
-  socket: Socket | null;
-  online: boolean;
-}
 
 
 export const SocketContext = createContext<SocketContextProps | undefined>(undefined);
 
 
-interface SocketProviderProps {
-  children: ReactNode; 
-}
-
-
 export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
-  const { socket, online } = useSocket('http://localhost:3000'); 
-  //console.log (online)
+  const { socket, online, conectarSocket, desconectarSocket } = useSocket('http://localhost:3000'); 
+  
+  
+  
+  console.log (socket)
+
+ 
+
+
+
+  
 
   return (
     

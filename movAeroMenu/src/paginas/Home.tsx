@@ -1,12 +1,11 @@
-import styled from "styled-components";
-import React from "react";
+
 import NotMov from "../components/notMov";
 import Tabless from "../components/Tabless";
 import FormMov from "../components/formMov";
 import { FechaHora } from "../components/FechaMov";
 
 export function Home() {
-  return (<Container>
+  return (<>
     <div className="flex justify-center items-center -mt-11">
       <p className="italic font-black text-3xl">MOVIMIENTO DE AERONAVE</p>
     </div>
@@ -32,9 +31,5 @@ export function Home() {
       </div>
     </div>
 
-
-  </Container>);
+  </>);
 }
-const Container = styled.div`
-  height:100vh;
-`

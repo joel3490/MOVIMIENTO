@@ -44,3 +44,9 @@ export type fpl = {
     c7: string;
     c8: string;
   };
+
+export type FplsDetalleProps = {
+    fpls: Fpls
+    index: number    
+  onSelect: (fpl: Fpls) => void;
+};

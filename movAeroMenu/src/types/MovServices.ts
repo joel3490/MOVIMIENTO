@@ -56,3 +56,29 @@ export function validarCampos(data: MovData): string | null {
   }
   return null;
 }
+
+
+export type Mensaje = {
+  id: string
+  idmov: string
+};
+
+export interface Registro {
+
+  id: string
+  procedencia: string
+  idAvion: string
+  idControladorArr: string
+  idControladorPro: string
+  obsArribo: string
+  nroVuelo: string
+  propietario: string
+  horaDespegue: string
+  modelo: string
+  horaArribo: string
+  destProcedencia: string
+  destino: string
+  destArribo: string
+  calleArribo: string
+  pistaArribo: string
+}
