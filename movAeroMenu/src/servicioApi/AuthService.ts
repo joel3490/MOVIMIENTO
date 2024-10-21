@@ -1,4 +1,5 @@
 import axios from "axios"
+import { useSocketContext } from "../components/SocketContext";
 
 type LoginData = {
   id_oaci: string;
@@ -55,3 +56,10 @@ export async function getAerouser() {
     throw error;  
   }
 }
+
+/* export function logout() {
+  localStorage.removeItem('auth_token');
+  const { desconectarSocket } = useSocketContext(); 
+  desconectarSocket(); 
+  console.log('Sesión cerrada y socket desconectado.');
+} */

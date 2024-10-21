@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { MdHelp } from "react-icons/md";
 import { getAerouser } from "../servicioApi/AuthService"
 import { useNavigate } from "react-router-dom";
+import { useSocketContext } from "../components/SocketContext";
 
 const ProfileMenu: React.FC = () => {
 
@@ -27,11 +28,14 @@ const ProfileMenu: React.FC = () => {
 
   const queryClient = useQueryClient()
   const navigate = useNavigate()
+  const { desconectarSocket } = useSocketContext();
 
   const logout = () => {
     localStorage.removeItem('auth_token')
-    queryClient.invalidateQueries({ queryKey: ['user'] })
-    navigate('/')
+    queryClient.invalidateQueries({ queryKey: ['user'] })    
+    desconectarSocket();
+    console.log('Sesión cerrada y socket desconectado.');      
+  navigate('/')
   }
 
   return (

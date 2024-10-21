@@ -1,66 +1,65 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { UseSocketResult } from '../types/SocketServices';
 
-
 export const useSocket = (serverPath: string): UseSocketResult => {
+  const [online, setOnline] = useState(false); 
+  const socket = useRef<Socket | null>(null);   
+
   
-  /* const socket: Socket = useMemo(
-    () => io(serverPath, { transports: ['websocket'] }),
-    [serverPath]
-  ); */
-
-  const [socket, setSocket] = useState<Socket | null>(null)
-  const [online, setOnline] = useState<boolean>(false);
-
-
+  
+  
   const conectarSocket = useCallback(() => {
-    const token = localStorage.getItem('auth_token')
-    const socketTemp = io(serverPath, {
-      transports: ['websocket'],
-      autoConnect: true,
-      forceNew: true,
-      query: { 'auth_token': token },
-    });
-
-    socketTemp.on('connect', () => setOnline(true));
-    socketTemp.on('disconnect', () => setOnline(false));    
     
-    setSocket(socketTemp);    
+    const token = localStorage.getItem('auth_token')
+    
+
+    if (token && !socket.current) {
+      const newSocket = io(serverPath, {
+        transports: ['websocket'],
+        autoConnect: true,
+        forceNew: true,
+        query: {'auth_token': token  } 
+      });
+      socket.current = newSocket;
+
+      newSocket.on('connect', () => {
+        console.log('Conectado al servidor');
+        setOnline(true);
+      });
+
+      newSocket.on('disconnect', () => {
+        console.log('Desconectado del servidor');
+        setOnline(false);
+      });
+
+      
+    }
   }, [serverPath]);
 
-
   const desconectarSocket = useCallback(() => {
-    socket?.disconnect();
-    setSocket(null);
-  }, [socket]);
-
-
-  useEffect(() => {
-    setOnline(socket?.connected||false); 
-  }, [socket]);
-
+    if (socket.current) {
+      socket.current.disconnect();
+      socket.current = null;
+      setOnline(false);
+    }
+  }, []);
 
   useEffect(() => {
-    socket?.on('connect', () => setOnline(true));
+    conectarSocket(); // Conectar al cargar el componente
+
     return () => {
-      socket?.off('connect');
+      desconectarSocket(); // Desconectar al desmontar el componente
     };
-  }, [socket]);
-
-
-  useEffect(() => {
-    socket?.on('disconnect', () => setOnline(false));
-    return () => {
-      socket?.off('disconnect');
-    };
-  }, [socket]);
-  
+  }, [conectarSocket, desconectarSocket]);
 
   return {
-    socket,
+    socket: socket.current,
     online,
     conectarSocket,
     desconectarSocket,
   };
 };
+
+
+

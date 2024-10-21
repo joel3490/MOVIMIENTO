@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt'
 import aeroUser from "../models/aeroUser.model"
 
 
-import jwt from 'jsonwebtoken'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 
 export class auth {
 
@@ -32,8 +32,8 @@ export class auth {
             { expiresIn: '180d' }                         
             );
             res.send(token)
-            console.log(token)   
-            console.log('JWT_SECRET:', process.env.JWT_SECRET);  
+            //console.log(token)   
+            //console.log('JWT_SECRET:', process.env.JWT_SECRET);  
             
             
            //return res.status(200).json({ message: 'Login exitoso' })  
@@ -70,6 +70,23 @@ export class auth {
 
     static aerouser = async (req: Request, res: Response) => {
         return res.json(req.aerouser)
+    }
+
+
+    static verificarJWT = (auth_token='')=>{
+
+        try {
+            const decoded  = jwt.verify(auth_token, process.env.JWT_SECRET!)as JwtPayload
+            if (decoded && typeof decoded === 'object' && 'id_oaci' in decoded) {
+                return [true, decoded.id_oaci as string]; // Aseguramos que es string
+              }
+
+              return [false, null]
+        } catch (error) {
+            return [false, null]
+            
+        }
+
     }
 
     
