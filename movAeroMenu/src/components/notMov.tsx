@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import React from "react"
 import { MdFlight } from "react-icons/md"
-import { socket } from "../socket/coneccionSocket"
+//import { socket } from "../socket/coneccionSocket"
 import { getMovById, updateMov } from "../servicioApi/MovService";
 import { Mensaje, Registro } from "../types/MovServices";
 
@@ -11,7 +11,7 @@ function NotMov() {
   const [mensajes, setMensajes] = useState<Mensaje[]>([])
   const [unreadCount, setUnreadCount] = useState(0)
   const [registros, setRegistros] = useState<Registro[]>([])
-  useEffect(() => {
+  /* useEffect(() => {
     socket.on("enviarMov", async (data) => {
       setMensajes((mensajes) => [...mensajes, data])
       localStorage.setItem('notificaciones', JSON.stringify([...mensajes, data]));
@@ -35,7 +35,7 @@ function NotMov() {
       socket.off("connect")
       socket.off("enviarMov")
     }
-  }, [])
+  }, []) */
   
 
   const [isHovered, setIsHovered] = useState(false)

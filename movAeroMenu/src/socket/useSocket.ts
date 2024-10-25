@@ -4,20 +4,23 @@ import { UseSocketResult } from '../types/SocketServices';
 
 export const useSocket = (serverPath: string): UseSocketResult => {
   const [online, setOnline] = useState(false); 
-  const socket = useRef<Socket | null>(null);   
-
-  
-  
+  const socket = useRef<Socket | null>(null);     
   
   const conectarSocket = useCallback(() => {
     
-    const token = localStorage.getItem('auth_token')
-    
+    const token = localStorage.getItem('auth_token')   
+
+    if (!token) {
+      console.log('No se encontró el token de autenticación');
+      return;
+    }
+
 
     if (token && !socket.current) {
       const newSocket = io(serverPath, {
         transports: ['websocket'],
         autoConnect: true,
+        //reconnection: true,
         forceNew: true,
         query: {'auth_token': token  } 
       });
@@ -31,9 +34,7 @@ export const useSocket = (serverPath: string): UseSocketResult => {
       newSocket.on('disconnect', () => {
         console.log('Desconectado del servidor');
         setOnline(false);
-      });
-
-      
+      });      
     }
   }, [serverPath]);
 

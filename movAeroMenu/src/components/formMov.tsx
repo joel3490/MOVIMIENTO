@@ -3,7 +3,7 @@ import { Form, useActionData, ActionFunctionArgs, redirect, useLocation } from "
 import { crearMov } from "../servicioApi/MovService"
 import ErrorMensaje from "./ErrorMensaje"
 import { fpl } from "../types/FplServices"
-import { socket } from "../socket/coneccionSocket"
+//import { socket } from "../socket/coneccionSocket"
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { validarCampos } from "../types/MovServices"
@@ -41,12 +41,12 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   try {
-    const nuevoId = await crearMov(data);
+    /* const nuevoId = await crearMov(data);
 
     socket.emit('enviarMov', {
       id: socket.id,
       idmov: nuevoId,
-    });
+    }); */
 
     toast.success('Se envió el vuelo', {
       position: "top-right",

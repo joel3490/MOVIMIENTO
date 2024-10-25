@@ -45,7 +45,7 @@ export const getFpl= async(req: Request, res: Response)=>{
                 'tipoMensaje', 'ca_tipo', 'ca_idUsu', 'ca_estado'
               ],
             order:[ ['id', 'DESC'] ],
-            limit: 5000
+            limit: 1000
         })            
         res.json({data: fpl})        
     } catch (error) {

@@ -8,35 +8,35 @@ import jwt, { JwtPayload } from 'jsonwebtoken'
 export class auth {
 
     static login = async (req: Request, res: Response) => {
-        try {            
-            const {id_oaci, password} = req.body
-            console.log('Datos recibidos:', { id_oaci })
-            const user = await aeroUser.findOne({ 
-                where: { id_oaci } ,
-                attributes: ['id_oaci', 'password'],                
-              })              
+        try {
+            const { id_oaci, password } = req.body
+            //console.log('Datos recibidos:', { id_oaci })
+            const user = await aeroUser.findOne({
+                where: { id_oaci },
+                attributes: ['id_oaci', 'password'],
+            })
             if (!user) {
                 const error = new Error('Usuario no encontrado')
-                return res.status(404).json({error: error.message})
+                return res.status(404).json({ error: error.message })
             }
             //res.status(200).json({ message: 'Usuario encontrado' })
-           // console.log(user)
-           const verificar = await bcrypt.compare(password, user.password.toString())
+            // console.log(user)
+            const verificar = await bcrypt.compare(password, user.password.toString())
             //console.log(verificar)
-           if (!verificar) {
-               return res.status(401).json({ error: 'Contraseña incorrecta' })
-           }          
-           const token = jwt.sign(
-            { id_oaci: user.id_oaci },  
-            process.env.JWT_SECRET as string,                      
-            { expiresIn: '180d' }                         
+            if (!verificar) {
+                return res.status(401).json({ error: 'Contraseña incorrecta' })
+            }
+            const token = jwt.sign(
+                { id_oaci: user.id_oaci },
+                process.env.JWT_SECRET as string,
+                { expiresIn: '180d' }
             );
             res.send(token)
             //console.log(token)   
             //console.log('JWT_SECRET:', process.env.JWT_SECRET);  
-            
-            
-           //return res.status(200).json({ message: 'Login exitoso' })  
+
+
+            //return res.status(200).json({ message: 'Login exitoso' })  
         }
         catch (error: any) {
             console.error(error);
@@ -73,21 +73,19 @@ export class auth {
     }
 
 
-    static verificarJWT = (auth_token='')=>{
+    static verificarJWT = (auth_token = '') => {
 
         try {
-            const decoded  = jwt.verify(auth_token, process.env.JWT_SECRET!)as JwtPayload
+            const decoded = jwt.verify(auth_token, process.env.JWT_SECRET!) as JwtPayload
             if (decoded && typeof decoded === 'object' && 'id_oaci' in decoded) {
                 return [true, decoded.id_oaci as string]; // Aseguramos que es string
-              }
+            }
 
-              return [false, null]
+            return [false, null]
         } catch (error) {
             return [false, null]
-            
+
         }
 
     }
-
-    
 }

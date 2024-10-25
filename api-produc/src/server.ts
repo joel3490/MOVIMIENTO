@@ -14,7 +14,7 @@ import morgan from 'morgan'
         await db.authenticate()
         //este codigo realiza la creacion de la tabla si no exiaste en al base de datos
         db.sync()
-        console.log(color.cyan('se conecto satisfactoriamente'))
+        //console.log(color.cyan('se conecto satisfactoriamente'))
     } catch (error) {
         console.log(error)
         console.log(color.red('nose conecto a la base de datos'))
@@ -40,7 +40,7 @@ import morgan from 'morgan'
  //LEER DATOS DE FORMUALARIO
  serverMov.use(express.json())
 
- serverMov.use(morgan('dev'))
+// serverMov.use(morgan('dev'))
 
 
 //es como la url padre 

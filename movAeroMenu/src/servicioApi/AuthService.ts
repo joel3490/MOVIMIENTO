@@ -1,5 +1,4 @@
 import axios from "axios"
-import { useSocketContext } from "../components/SocketContext";
 
 type LoginData = {
   id_oaci: string;
@@ -41,7 +40,7 @@ export async function getAerouser() {
           Authorization: `Bearer ${token}`
       }
   });    
-    console.log(response) 
+    //console.log('aqui esta el dato del usuario',response) 
     //console.log(token)
     return response  
     
@@ -57,9 +56,3 @@ export async function getAerouser() {
   }
 }
 
-/* export function logout() {
-  localStorage.removeItem('auth_token');
-  const { desconectarSocket } = useSocketContext(); 
-  desconectarSocket(); 
-  console.log('Sesión cerrada y socket desconectado.');
-} */
