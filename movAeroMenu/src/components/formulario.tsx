@@ -2,20 +2,16 @@ import React, { useContext, useEffect, useState } from "react";
 import {
   Form,
   useActionData,
-  ActionFunctionArgs,
-  redirect,
+  ActionFunctionArgs,  
   useLocation,
 } from "react-router-dom";
-import { crearMov } from "../servicioApi/MovService";
+
 import ErrorMensaje from "./ErrorMensaje";
 import { fpl } from "../types/FplServices";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { validarCampos } from "../types/MovServices";
 import { Prueba } from "./ConexionSocket";
-import { ChatContext, useChatContext } from "./chatContext";
-import { types, SocketContextProps, SocketProviderProps } from "../types/SocketServices";
-import { SocketContext } from "./SocketContext";
 
 export async function action({ request }: ActionFunctionArgs) {
   const f = await request.formData();
@@ -43,116 +39,14 @@ export async function action({ request }: ActionFunctionArgs) {
     return null;
   }
 
-
-    
-  try {
-    
-    const socketId = await crearMov(data);
-    console.log(socketId)
-    localStorage.setItem("socketId", socketId);
-
-
-
-
-
-    toast.success("Se envió el vuelo", {
-      position: "top-right",
-      autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-    });
-    
-    return redirect("/mov");
-  } catch (error) {
-    toast.error("Ocurrió un error al crear el movimiento.", {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-    });
-    return null;
-  }
-
-  //console.log(data) para ver q llegue los datos hasta ahi
-
-  //console.log('desde el formulario', nuevoId);
+  
 }
 
- function FormMov() {
-  //ESTAS LINEA SON PRINCIPALES
+ function Formulario() {
+ //ESTAS LINEA SON PRINCIPALES
   const location = useLocation();
-  const error = useActionData() as string;
-
-  const [c7Part1, setc7Part1] = useState("");
-  
-  
-  const [nuevoId, setNuevoId] = useState<string | null>(null)
-  
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const storedSocketId = localStorage.getItem("socketId");
-      if (storedSocketId && storedSocketId !== nuevoId) {
-        setNuevoId(storedSocketId);
-        console.log("Nuevo ID (socketId) actualizado:", storedSocketId);
-        localStorage.removeItem("socketId"); // Limpia después de asignarlo
-      }
-    }, 900); // Verifica cada segundo
-  
-    // Limpia el intervalo cuando el componente se desmonta
-    return () => clearInterval(interval);
-  }, [nuevoId]);
-  
-
-
-  const context = useContext(ChatContext);
-  if (!context) { throw new Error("TuFormulario debe estar dentro de un ChatProvider"); }
-  const { dispatch } = context;
-  const socketContext = useContext(SocketContext);
-  if (!socketContext) { console.error('El contexto de socket no está disponible'); return null; }
-  const { socket, online } = socketContext;
-  const { stateSocket } = useChatContext();
-  const { userAuth } = stateSocket;
-
-  useEffect(() => {
-    if (nuevoId && socket && online) {
-      console.log("Emitir evento con nuevoId:", nuevoId);
-      socket.emit('enviarMov', {
-        procedencia: userAuth?.id_oaci,
-        destino: c7Part1,
-        idRegistro: nuevoId
-      });
-      console.log('Evento emitido: enviarMov');
-    }/*  else if (!online) {
-      console.error('Socket no conectado o fuera de línea');
-    } */
-  }, [nuevoId, socket, online, userAuth, c7Part1]);
-
-  const enviarUser = () => {
-    //dispach
-    if (c7Part1) {
-      dispatch({
-        type: types.activarChat,
-        payload: c7Part1,
-      });
-      console.log("Usuario enviado al contexto:", c7Part1);
-    } else {
-      console.log("c7Part1 está vacío");
-    }
-    //socket.io
-    
-  };
-  //const location = useLocation();
+   const error = useActionData() as string;  
   const state = location.state as { selectedFpl?: fpl };
-
-  //const error = useActionData() as string;
 
   const [fecha, setFecha] = useState("");
   const [c1, setc1] = useState("");
@@ -170,7 +64,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const [c7, setc7] = useState("");
 
-  
+  const [c7Part1, setc7Part1] = useState("");
   const [c7Part2, setc7Part2] = useState("");
   const [c8, setc8] = useState("");
   //sacar la matricula de c8
@@ -700,7 +594,7 @@ export async function action({ request }: ActionFunctionArgs) {
           <div>
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              onClick={enviarUser}
+             //onClick={enviaUser}
             >
               REGISTRAR
             </button>
@@ -715,4 +609,4 @@ export async function action({ request }: ActionFunctionArgs) {
     </>
   );
 }
-export default FormMov;
+export default Formulario;

@@ -41,6 +41,15 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     })
   }, [socket, dispatch]);
 
+
+
+ 
+ 
+
+
+
+
+
   useEffect(() => {
     const fetchUser = async () => {
       try {

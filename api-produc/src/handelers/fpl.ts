@@ -10,7 +10,6 @@ export const searchFpl = async (req: Request, res: Response) => {
         if (!fplBuscar || typeof fplBuscar !== 'string') {
             return res.status(400).json({ error: 'El parámetro searchTerm es requerido y debe ser una cadena.' });
         }
-
         const fpls = await Fpl.findAll({
             where: {
                 [Op.or]: [
@@ -26,7 +25,6 @@ export const searchFpl = async (req: Request, res: Response) => {
             order: [['id', 'DESC']],
             limit: 200
         });
-
         res.json({ data: fpls });
     } catch (error) {
         console.log('Error en la búsqueda:', error);

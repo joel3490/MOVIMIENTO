@@ -6,8 +6,6 @@ import color from 'colours'
 
 const http = require('http')
 const server = http.createServer(serverMov)
-
-
 const io = require('socket.io')(server, {
     cors: {
         origin: '*',
@@ -15,14 +13,7 @@ const io = require('socket.io')(server, {
     }
 })
 
-io.on('connection', async (socket) => {
-
-
-   /*  io.on('enviarMov', (data) => {
-        console.log(data)
-        socket.broadcast.emit('enviarMov', data)
-        //io.emit('enviarMov', data) //para q llegue el dato para quien envia tambien
-    }) */
+io.on('connection', async (socket) => {    
 
     //console.log('Conexión aceptada:', socket.handshake.query.auth_token);
     const token = socket.handshake.query.auth_token;
@@ -40,14 +31,15 @@ io.on('connection', async (socket) => {
     }
     
     await socketUser.usuarioConectado(id_oaci);
-    
+    socket.join( id_oaci );
+
+    socket.on('enviarMov', (data) => {
+        console.log('enviarMov',data);
+        io.to(data.destino).emit('recibidoMov', data)
+    });    
+
     console.log('se conecto un cliente', id_oaci);
-
-
-    io.emit('lista-usuarios', await socketUser.getUserAero())
-    
-
-    
+    io.emit('lista-usuarios', await socketUser.getUserAero())   
 
     socket.on('disconnect', async() => {
         console.log('Cliente desconectado', id_oaci);
@@ -56,12 +48,7 @@ io.on('connection', async (socket) => {
     });
 
 })
-
 server.listen(3000, '0.0.0.0', () => {
-
-
-
-
-    
+        
     //console.log(color.cyan('desde el puerto 3000'))
 })

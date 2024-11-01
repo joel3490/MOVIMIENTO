@@ -18,7 +18,7 @@ export async function crearMov(data: MovData) {
     }
 
     const result = safeParse(ValidarMovSchema, data)
-    console.log(result)
+    //console.log(result)
     if (result.success) {
       const url = `${import.meta.env.VITE_API_URL}/mov/crearMov`
       const response= await axios.post(url, result.output, {

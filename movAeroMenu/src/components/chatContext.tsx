@@ -15,7 +15,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
     const [chatState, dispatch] = useReducer(chatReducer, initialState); 
     return (
         <ChatContext.Provider value={{
-            state: chatState, dispatch
+            stateSocket: chatState, dispatch
         }}>
             {children}
         </ChatContext.Provider>

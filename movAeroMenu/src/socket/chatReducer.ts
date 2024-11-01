@@ -17,6 +17,14 @@ export const chatReducer = (state: ChatState, action: ChatAction): ChatState => 
                   ...state,
                   userAuth: action.payload,
                 };
+        case types.activarChat:
+            
+
+            return {
+                ...state,
+                chatActivo: action.payload,
+                mensajes: []
+            }
         default:
             return state;
     }

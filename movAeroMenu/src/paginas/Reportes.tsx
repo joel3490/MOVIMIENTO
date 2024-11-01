@@ -1,4 +1,6 @@
 
+
+import Script from "../components/script";
 import { Prueba } from "../components/ConexionSocket";
 export function Reportes() {
   return (
@@ -7,6 +9,7 @@ export function Reportes() {
   
     <Prueba/>
     <h1>reportes</h1>
+    
   </>
   
 );

@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import React from "react"
 import { MdFlight } from "react-icons/md"
 //import { socket } from "../socket/coneccionSocket"
 import { getMovById, updateMov } from "../servicioApi/MovService";
 import { Mensaje, Registro } from "../types/MovServices";
+import { SocketContext } from "./SocketContext";
+import { useChatContext } from "./chatContext";
 
 
 function NotMov() {
@@ -11,8 +13,23 @@ function NotMov() {
   const [mensajes, setMensajes] = useState<Mensaje[]>([])
   const [unreadCount, setUnreadCount] = useState(0)
   const [registros, setRegistros] = useState<Registro[]>([])
-  /* useEffect(() => {
-    socket.on("enviarMov", async (data) => {
+
+
+  const socketContext = useContext(SocketContext);
+  if (!socketContext) { console.error('El contexto de socket no está disponible'); return null; }
+  const { socket, online } = socketContext;
+  const { stateSocket } = useChatContext();
+  
+
+  
+
+socket?.on('recibidoMov', (data) => {
+  console.log(data);
+  
+})
+
+
+    /* socket?.on("enviarMov", async (data) => {
       setMensajes((mensajes) => [...mensajes, data])
       localStorage.setItem('notificaciones', JSON.stringify([...mensajes, data]));
 
@@ -32,8 +49,8 @@ function NotMov() {
       console.log(data, "desde el notMov", data.idmov)
     })
     return () => {
-      socket.off("connect")
-      socket.off("enviarMov")
+      socket?.off("connect")
+      socket?.off("enviarMov")
     }
   }, []) */
   

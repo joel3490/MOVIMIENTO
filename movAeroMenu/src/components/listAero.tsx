@@ -3,8 +3,8 @@ import { useChatContext } from "./chatContext";
 
 export const ListAero = () => {
 
-    const { state } = useChatContext();
-    const { aeroUser, userAuth } = state;   
+    const { stateSocket } = useChatContext();
+    const { aeroUser, userAuth } = stateSocket;   
     
 
     useEffect(() => {

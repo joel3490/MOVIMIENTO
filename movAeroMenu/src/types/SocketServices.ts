@@ -3,11 +3,11 @@ import { Socket } from 'socket.io-client';
 
 //? coneccion de socket 
 export interface SocketContextProps {
-    socket: Socket | null;
-    online: boolean;
-    conectarSocket: () => void;
-    desconectarSocket: () => void;
-  }
+  socket: Socket | null;
+  online: boolean;
+  conectarSocket: () => void;
+  desconectarSocket: () => void;
+}
 
 export interface SocketProviderProps {
     children: ReactNode; 
@@ -35,7 +35,7 @@ export const types = {
 //?  INTERFASES DE CHAT CONTEXT
 // Estado inicial con valores por defecto
 export const initialState: ChatState = {
-  uid: '',
+  id_oaci: '',
   chatActivo: null,
   aeroUser: [],
   mensajes: [],
@@ -43,7 +43,7 @@ export const initialState: ChatState = {
 };
 // Definimos la estructura del estado inicial
 export interface ChatState {
-  uid: string;
+  id_oaci: string;
   chatActivo: string | null; // UID del usuario al que se quiere enviar mensajes
   aeroUser: Usuario[]; // Lista de usuarios
   mensajes: Mensaje[]; // El chat seleccionado (historial de mensajes)
@@ -77,7 +77,7 @@ export interface Mensaje {
 
 
 export interface ChatContextProps {
-  state: ChatState;      // Este es el estado global del chat
+  stateSocket: ChatState;      // Este es el estado global del chat
   dispatch: React.Dispatch<ChatAction>; // Esto es lo que usas para despachar acciones al reducer
 }
 
