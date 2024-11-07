@@ -1,35 +1,40 @@
-import { useState, useEffect, useContext } from "react"
-import React from "react"
-import { MdFlight } from "react-icons/md"
+import { useState, useEffect, useContext } from "react";
+import React from "react";
+import { MdFlight } from "react-icons/md";
 //import { socket } from "../socket/coneccionSocket"
-import { getMovById, updateMov } from "../servicioApi/MovService";
+import { updateMov } from "../servicioApi/MovService";
 import { Mensaje, Registro } from "../types/MovServices";
 import { SocketContext } from "./SocketContext";
 import { useChatContext } from "./chatContext";
 
-
 function NotMov() {
-
-  const [mensajes, setMensajes] = useState<Mensaje[]>([])
-  const [unreadCount, setUnreadCount] = useState(0)
-  const [registros, setRegistros] = useState<Registro[]>([])
-
+  const [mensajes, setMensajes] = useState<Mensaje[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [registros, setRegistros] = useState<Registro[]>([]);
 
   const socketContext = useContext(SocketContext);
-  if (!socketContext) { console.error('El contexto de socket no está disponible'); return null; }
+  if (!socketContext) {
+    console.error("El contexto de socket no está disponible");
+    return null;
+  }
   const { socket, online } = socketContext;
   const { stateSocket } = useChatContext();
-  
 
-  
+  useEffect(() => {
+    // Escuchar el evento 'recibidoMov' del socket
+    socket?.on("recibidoMov", (movimientos) => {
+      console.log("Movimientos recibidos:", movimientos);
+      setRegistros(movimientos); // Actualizar el estado con los datos recibidos
+      setUnreadCount(movimientos.length); // Actualizar el contador de no leídos
+    });
 
-socket?.on('recibidoMov', (data) => {
-  console.log(data);
-  
-})
+    // Limpieza al desmontar el componente
+    return () => {
+      socket?.off("recibidoMov");
+    };
+  }, [socket]);
 
-
-    /* socket?.on("enviarMov", async (data) => {
+  /* socket?.on("enviarMov", async (data) => {
       setMensajes((mensajes) => [...mensajes, data])
       localStorage.setItem('notificaciones', JSON.stringify([...mensajes, data]));
 
@@ -53,46 +58,46 @@ socket?.on('recibidoMov', (data) => {
       socket?.off("enviarMov")
     }
   }, []) */
-  
 
-  const [isHovered, setIsHovered] = useState(false)
+  const [isHovered, setIsHovered] = useState(false);
   const handleMouseEnter = () => {
-    setIsHovered(true)
-  }
+    setIsHovered(true);
+  };
 
   const handleMouseLeave = () => {
-    setIsHovered(false)
-  }
+    setIsHovered(false);
+  };
 
   const handleRecibir = (index: number) => {
-
     setMensajes((prevMensajes) => {
-      const nuevosMensajes = [...prevMensajes]
+      const nuevosMensajes = [...prevMensajes];
       nuevosMensajes.splice(index, 1);
       return nuevosMensajes;
-    })
+    });
 
-    setUnreadCount((prevCount) => Math.max(prevCount - 1, 0))
-  }
+    setUnreadCount((prevCount) => Math.max(prevCount - 1, 0));
+  };
 
   //modal
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [selectedRegistro, setSelectedRegistro] = useState<Registro | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRegistro, setSelectedRegistro] = useState<Registro | null>(
+    null
+  );
 
   const openModal = (registro: Registro) => {
     setSelectedRegistro(registro);
     setIsModalOpen(true);
-  }
+  };
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedRegistro(null);
-  }
+  };
 
-  const [horaArribo, setHoraArribo] = useState('');
-  const [pistaArribo, setPistaArribo] = useState('');
-  const [calleArribo, setCalleArribo] = useState('');
-  const [idControladorArr, setIdControladorArr] = useState('');
-  const [obsArribo, setObsArribo] = useState('');
+  const [horaArribo, setHoraArribo] = useState("");
+  const [pistaArribo, setPistaArribo] = useState("");
+  const [calleArribo, setCalleArribo] = useState("");
+  const [idControladorArr, setIdControladorArr] = useState("");
+  const [obsArribo, setObsArribo] = useState("");
 
   const handleActualizar = async () => {
     if (selectedRegistro) {
@@ -103,12 +108,14 @@ socket?.on('recibidoMov', (data) => {
           calleArribo,
           idControladorArr,
           obsArribo,
-        }
-        await updateMov(selectedRegistro.id, data)
+        };
+        await updateMov(selectedRegistro.id, data);
 
-        setUnreadCount((prevCount) => Math.max(prevCount - 1, 0))
+        setUnreadCount((prevCount) => Math.max(prevCount - 1, 0));
 
-        const index = mensajes.findIndex((mensaje) => mensaje.idmov === selectedRegistro.id);
+        const index = mensajes.findIndex(
+          (mensaje) => mensaje.idmov === selectedRegistro.id
+        );
         if (index !== -1) {
           setMensajes((prevMensajes) => {
             const nuevosMensajes = [...prevMensajes];
@@ -116,24 +123,28 @@ socket?.on('recibidoMov', (data) => {
             return nuevosMensajes;
           });
         }
-        setRegistros((prevRegistros) => prevRegistros.filter((registro) => registro.id !== selectedRegistro.id))
+        setRegistros((prevRegistros) =>
+          prevRegistros.filter(
+            (registro) => registro.id !== selectedRegistro.id
+          )
+        );
         setPistaArribo("");
         setCalleArribo("");
         setIdControladorArr("");
         setObsArribo("");
 
-        closeModal()
+        closeModal();
       } catch (error) {
-        console.error('Error al actualizar el registro:', error)
+        console.error("Error al actualizar el registro:", error);
       }
     }
-  }
-  //capturar hora  
+  };
+  //capturar hora
   useEffect(() => {
     const obtenerHoraActual = () => {
       const ahora = new Date();
-      const horas = String(ahora.getHours()).padStart(2, '0');
-      const minutos = String(ahora.getMinutes()).padStart(2, '0');
+      const horas = String(ahora.getHours()).padStart(2, "0");
+      const minutos = String(ahora.getMinutes()).padStart(2, "0");
       return `${horas}:${minutos}`;
     };
 
@@ -142,7 +153,7 @@ socket?.on('recibidoMov', (data) => {
 
   const manejarCambioHora = (event: React.ChangeEvent<HTMLInputElement>) => {
     setHoraArribo(event.target.value);
-  }
+  };
   return (
     <>
       <div className="flex justify-end relative pr-10">
@@ -154,7 +165,6 @@ socket?.on('recibidoMov', (data) => {
             style={{ zIndex: 20 }}
           />
           <span className="notification">{unreadCount}</span>{" "}
-
         </div>
 
         {isHovered && (
@@ -178,21 +188,22 @@ socket?.on('recibidoMov', (data) => {
                   <th className="px-4 py-2"></th>
                 </tr>
               </thead>
-              <tbody >
+              <tbody>
                 {registros.map((registro, index) => (
                   <tr key={index} className="hover:bg-blue-100">
                     <td className="px-4 py-2">{registro.idAvion}</td>
                     <td className="px-4 py-2">{registro.nroVuelo}</td>
                     <td className="px-4 py-2">{registro.modelo}</td>
                     <td className="px-4 py-2">{registro.propietario}</td>
-                    <td className="px-4 py-2">{registro.procedencia} <br /> {registro.destProcedencia}</td>
+                    <td className="px-4 py-2">
+                      {registro.procedencia} <br /> {registro.destProcedencia}
+                    </td>
                     <td className="px-4 py-2">{registro.horaDespegue}</td>
                     <td className="px-4 py-2">{registro.idControladorPro}</td>
                     <td className="px-4 py-2">
                       <button
                         className="bg-red-500 text-white px-4 py-2 rounded"
                         type="button"
-
                         onClick={() => openModal(registro)}
                       >
                         Recibir
@@ -212,7 +223,9 @@ socket?.on('recibidoMov', (data) => {
                 <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
               </div>
               <div className="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all max-w-4xl w-full p-6">
-                <h2 className="text-lg font-medium text-gray-900 mb-4">Progreso de Vulo</h2>
+                <h2 className="text-lg font-medium text-gray-900 mb-4">
+                  Progreso de Vuelo
+                </h2>
                 <div className="p-5">
                   <table className="w-full table-auto">
                     <thead>
@@ -228,13 +241,27 @@ socket?.on('recibidoMov', (data) => {
                     </thead>
                     <tbody>
                       <tr>
-                        <td className="px-4 py-2">{selectedRegistro?.idAvion}</td>
-                        <td className="px-4 py-2">{selectedRegistro?.nroVuelo}</td>
-                        <td className="px-4 py-2">{selectedRegistro?.modelo}</td>
-                        <td className="px-4 py-2">{selectedRegistro?.propietario}</td>
-                        <td className="px-4 py-2">{selectedRegistro?.procedencia}</td>
-                        <td className="px-4 py-2">{selectedRegistro?.horaDespegue}</td>
-                        <td className="px-4 py-2">{selectedRegistro?.idControladorPro}</td>
+                        <td className="px-4 py-2">
+                          {selectedRegistro?.idAvion}
+                        </td>
+                        <td className="px-4 py-2">
+                          {selectedRegistro?.nroVuelo}
+                        </td>
+                        <td className="px-4 py-2">
+                          {selectedRegistro?.modelo}
+                        </td>
+                        <td className="px-4 py-2">
+                          {selectedRegistro?.propietario}
+                        </td>
+                        <td className="px-4 py-2">
+                          {selectedRegistro?.procedencia}
+                        </td>
+                        <td className="px-4 py-2">
+                          {selectedRegistro?.horaDespegue}
+                        </td>
+                        <td className="px-4 py-2">
+                          {selectedRegistro?.idControladorPro}
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -273,12 +300,15 @@ socket?.on('recibidoMov', (data) => {
                           defaultValue={selectedRegistro?.destArribo}
                         />
                       </div>
-                    </div>{/* fin 2 inputs*/}
-
+                    </div>
+                    {/* fin 2 inputs*/}
 
                     <div className="flex flex-wrap -mx-3 mb-1">
                       <div className="w-full md:w-1/3 px-3">
-                        <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-1" htmlFor="horaArribo">
+                        <label
+                          className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-1"
+                          htmlFor="horaArribo"
+                        >
                           HORA ARRIBO
                         </label>
                         <input
@@ -291,7 +321,10 @@ socket?.on('recibidoMov', (data) => {
                         />
                       </div>
                       <div className="w-full md:w-1/3 px-3 mb-1 md:mb-0">
-                        <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-1" htmlFor="pistaArribo">
+                        <label
+                          className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-1"
+                          htmlFor="pistaArribo"
+                        >
                           RWY
                         </label>
                         <input
@@ -305,7 +338,10 @@ socket?.on('recibidoMov', (data) => {
                         />
                       </div>
                       <div className="w-full md:w-1/3 px-3">
-                        <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-1" htmlFor="calleArribo">
+                        <label
+                          className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-1"
+                          htmlFor="calleArribo"
+                        >
                           TWY
                         </label>
                         <input
@@ -321,7 +357,10 @@ socket?.on('recibidoMov', (data) => {
                     </div>
                     <div className="flex flex-wrap -mx-3 mb-1">
                       <div className="w-full md:w-1/3 px-3">
-                        <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-1" htmlFor="idControlador">
+                        <label
+                          className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-1"
+                          htmlFor="idControlador"
+                        >
                           CONTROLADOR
                         </label>
                         <input
@@ -335,7 +374,10 @@ socket?.on('recibidoMov', (data) => {
                         />
                       </div>
                       <div className="w-full md:w-1/2 px-3 mb-1 md:mb-0">
-                        <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-1" htmlFor="obs">
+                        <label
+                          className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-1"
+                          htmlFor="obs"
+                        >
                           OBSERVACION
                         </label>
                         <input
@@ -349,26 +391,34 @@ socket?.on('recibidoMov', (data) => {
                         />
                       </div>
                     </div>
-
-                  </div>{/*fin div forulario*/}
-                </div>{/* fin de la tabla*/}
+                  </div>
+                  {/*fin div forulario*/}
+                </div>
+                {/* fin de la tabla*/}
                 <br />
-                <div className="flex justify-end">
-                  <button
-                    className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mr-2"
-                    type="button"
-                    onClick={closeModal}
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                    type="button"
-                    onClick={handleActualizar}
-                  //onClick={() => handleRecibir(index)}
-                  >
-                    Registrar
-                  </button>
+
+                <div className="flex justify-between items-center">
+                  
+                  
+
+                  
+                  <div className="flex space-x-2">
+                    <button
+                      className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+                      type="button"
+                      onClick={closeModal}
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                      type="button"
+                      onClick={handleActualizar}
+                      // onClick={() => handleRecibir(index)}
+                    >
+                      Registrar
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

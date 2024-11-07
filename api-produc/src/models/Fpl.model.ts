@@ -97,24 +97,7 @@ class Fpl extends Model{
     })
     declare tipoMensaje: String
 
-    @Column({
-        type: DataType.STRING(),
-        allowNull: false,
-    })
-    declare ca_tipo: String
-
-    @Column({
-        type: DataType.FLOAT,
-        allowNull: false,
-    })
-    declare ca_idUsu: Number
-
     
-    @Default(true)
-    @Column({
-        type: DataType.BOOLEAN
-    })
-    declare ca_estado: Boolean
 }
 
 export default Fpl

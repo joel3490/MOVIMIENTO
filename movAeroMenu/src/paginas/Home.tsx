@@ -7,7 +7,7 @@ import { FechaHora } from "../components/FechaMov";
 export function Home() {
   return (<>
     <div className="flex justify-center items-center -mt-11">
-      <p className="italic font-black text-3xl">MOVIMIENTO DE AERONAVE</p>
+      <p className="italic font-black text-3xl">MOVIMIENTO DE AERONAVE JESMA</p>
     </div>
 
 <br />

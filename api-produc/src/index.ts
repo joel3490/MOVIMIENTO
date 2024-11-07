@@ -31,14 +31,27 @@ io.on('connection', async (socket) => {
     }
     
     await socketUser.usuarioConectado(id_oaci);
+    
     socket.join( id_oaci );
+    try {
+      const movimientos = await socketUser.getMov(id_oaci); // Usar id_oaci como destino
+      socket.emit('recibidoMov', movimientos); // Enviar movimientos al cliente
+  } catch (error) {
+      console.error('Error al obtener movimientos al conectar:', error);
+  }
 
-    socket.on('enviarMov', (data) => {
-        console.log('enviarMov',data);
-        io.to(data.destino).emit('recibidoMov', data)
-    });    
-
-    console.log('se conecto un cliente', id_oaci);
+    socket.on('enviarMov', async (data) => {
+        try {
+          console.log('enviarMov', data);
+          
+          const movimientos = await socketUser.getMov(data.destino);
+          //console.log(movimientos);   
+          io.to(data.destino).emit('recibidoMov', movimientos);
+        } catch (error) {
+          console.error('Error al obtener movimientos:', error);
+        }
+      });
+    //console.log('se conecto un cliente', id_oaci);
     io.emit('lista-usuarios', await socketUser.getUserAero())   
 
     socket.on('disconnect', async() => {
@@ -50,5 +63,5 @@ io.on('connection', async (socket) => {
 })
 server.listen(3000, '0.0.0.0', () => {
         
-    //console.log(color.cyan('desde el puerto 3000'))
+    console.log(color.cyan('desde el puerto 3000'))
 })

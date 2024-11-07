@@ -1,4 +1,6 @@
 import aeroUser from "../models/aeroUser.model"
+import Mov from "../models/Mov.model";
+
 
 
 export class socketUser {
@@ -38,6 +40,21 @@ export class socketUser {
             order:[ ['online', 'DESC'] ]            
         })
         return usuarios
+    }
+
+
+    static getMov = async (destino)=>{
+        try {
+            const movNot = await Mov.findAll({
+              where: {
+                estado: 1,
+                destino: destino
+              }
+            });
+            return movNot;
+          } catch (error) {
+            console.error('Error al obtener movimientos con estado 1:', error);
+          }
     }
 
 

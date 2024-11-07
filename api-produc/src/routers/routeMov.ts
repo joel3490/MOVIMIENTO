@@ -31,6 +31,7 @@ router.post('/crearMov',
     body('calleArribo').optional(),
     body('pistaArribo').optional(),
     body('estado').optional(),
+    body('alterno').optional(),
     handleInputErrors, 
     createMov
 );

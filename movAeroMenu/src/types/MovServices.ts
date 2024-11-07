@@ -24,7 +24,8 @@ export const ValidarMovSchema = object({
     destArribo: optional(string()),
     calleArribo: optional(string()),
     pistaArribo: optional(string()),    
-    estado: optional(string())
+    estado: optional(string()),
+    alterno: optional(string())
 });
 
 type MovData = {
@@ -81,4 +82,6 @@ export interface Registro {
   destArribo: string
   calleArribo: string
   pistaArribo: string
+  estado: string,
+  alterno: string
 }

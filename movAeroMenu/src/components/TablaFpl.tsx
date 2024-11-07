@@ -8,6 +8,8 @@ import { fpl } from '../types/FplServices'
  
 
 
+
+
 export async function loader() {
     const Fpls =  await getFpl()   
     return Fpls
@@ -42,13 +44,25 @@ export default function TablaFpl() {
       navigate('/mov', { state: { selectedFpl } })
   }
 
-  const handleSelectClick = async () => {
+  /* const handleSelectClick = async () => {
     const result = await fplBuscar(searchTerm);
     if (result) {
         setFpls(result)
         setCurrentPage(0)
     }
+}; */
+const handleSelectClick = async () => {
+    const result = await fplBuscar(searchTerm);
+    if (result) {
+        const resultWithId = result.map((item, index) => ({
+            ...item,
+            id: Date.now() + index, // Asigna un id único basado en la hora actual
+        }));
+        setFpls(resultWithId);
+        setCurrentPage(0);
+    }
 };
+
 
  
     //console.log("Valor de búsqueda:", searchTerm)

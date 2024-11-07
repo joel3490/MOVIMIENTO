@@ -30,6 +30,9 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     };
   }, [conectarSocket, desconectarSocket]);
 
+
+
+
   useEffect(() => {
 
     socket?.on('lista-usuarios', (getUserAero) => {
@@ -40,12 +43,6 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       })
     })
   }, [socket, dispatch]);
-
-
-
- 
- 
-
 
 
 

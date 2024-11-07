@@ -9,7 +9,7 @@ export const getMov = async (req: Request, res: Response) => {
                 'procedencia', 'destino', 'horaDespegue', 'horaArribo',
                 'ruta', 'nroVuelo', 'obsProcedencia', 'idControladorPro', 'obsArribo', 'idControladorArr', 
                 'nivel', 'eobt', 'destProcedencia', 'pistaProcedencia', 'calleProcedencia',
-                'destArribo', 'pistaArribo', 'calleArribo', 'estado'
+                'destArribo', 'pistaArribo', 'calleArribo', 'estado', 'alterno'
             ],
 
             order: [['id', 'DESC']],
@@ -33,7 +33,7 @@ export const updateMov = async (req: Request, res: Response) => {
             ruta, nroVuelo, obsProcedencia, idControladorPro, obsArribo, idControladorArr,
             nivel, eobt, destProcedencia, pistaProcedencia,
             calleProcedencia, destArribo, pistaArribo,
-            calleArribo, estado
+            calleArribo, estado, alterno
         } = req.body;
 
         // Encontrar el registro por su ID
@@ -50,7 +50,7 @@ export const updateMov = async (req: Request, res: Response) => {
             ruta, nroVuelo, obsProcedencia, idControladorPro, obsArribo, idControladorArr,
             nivel, eobt, destProcedencia, pistaProcedencia,
             calleProcedencia, destArribo, pistaArribo,
-            calleArribo, estado
+            calleArribo, estado, alterno
         });
 
         res.json({ message: 'Movimiento actualizado correctamente', data: mov });
@@ -75,7 +75,7 @@ export const getMovById = async (req: Request, res: Response) => {
                 'procedencia', 'destino', 'horaDespegue', 'horaArribo',
                 'ruta', 'nroVuelo', 'obsProcedencia', 'idControladorPro', 'obsArribo', 'idControladorArr', 
                 'nivel', 'eobt', 'destProcedencia', 'pistaProcedencia', 'calleProcedencia',
-                'destArribo', 'pistaArribo', 'calleArribo', 'estado'
+                'destArribo', 'pistaArribo', 'calleArribo', 'estado', 'alterno'
             ],
 
         })
@@ -102,7 +102,7 @@ export const createMov = async (req: Request, res: Response) => {
             ruta, nroVuelo, obsProcedencia, idControladorPro, obsArribo, idControladorArr,
             nivel, eobt, destProcedencia, pistaProcedencia,
             calleProcedencia, destArribo, pistaArribo,
-            calleArribo, estado
+            calleArribo, estado, alterno
         } = req.body;
 
         const mov = await Mov.create({
@@ -112,7 +112,7 @@ export const createMov = async (req: Request, res: Response) => {
             ruta, nroVuelo, obsProcedencia, idControladorPro, obsArribo, idControladorArr,
             nivel, eobt, destProcedencia, pistaProcedencia,
             calleProcedencia, destArribo, pistaArribo,
-            calleArribo, estado
+            calleArribo, estado, alterno
         });
 
         res.status(201).json({ id: mov.id });

@@ -147,9 +147,17 @@ class Mov extends Model {
 
     @Column({
         type: DataType.STRING,
+        allowNull: true, // Permitir valores nulos
+    })
+    declare alterno: string;
+
+   
+
+    @Column({
+        type: DataType.INTEGER,
         allowNull: true,
     })
-    declare estado: string;
+    declare estado: number;
     
     }
 

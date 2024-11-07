@@ -9,6 +9,8 @@ type MovData = {
 
 export async function crearMov(data: MovData) {
   const token = localStorage.getItem('auth_token')
+  data.estado = '1'
+  
   
   try {
     const error = validarCampos(data)
@@ -45,6 +47,8 @@ export async function crearMov(data: MovData) {
 
 export async function updateMov(id: string, data: MovData) {
   const token = localStorage.getItem('auth_token')
+
+  data.estado = '2'
     
   try {
     const url = `${import.meta.env.VITE_API_URL}/mov/${id}`

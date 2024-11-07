@@ -14,7 +14,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { validarCampos } from "../types/MovServices";
 import { Prueba } from "./ConexionSocket";
 import { ChatContext, useChatContext } from "./chatContext";
-import { types, SocketContextProps, SocketProviderProps } from "../types/SocketServices";
+import { types } from "../types/SocketServices";
 import { SocketContext } from "./SocketContext";
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -27,8 +27,6 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const validationError = validarCampos(data);
 
-  //await crearMov(data);
-  // const nuevoId = await crearMov(data);
   if (validationError) {
     toast.error(validationError, {
       position: "top-right",
@@ -50,10 +48,6 @@ export async function action({ request }: ActionFunctionArgs) {
     const socketId = await crearMov(data);
     console.log(socketId)
     localStorage.setItem("socketId", socketId);
-
-
-
-
 
     toast.success("Se envió el vuelo", {
       position: "top-right",
@@ -101,7 +95,7 @@ export async function action({ request }: ActionFunctionArgs) {
       const storedSocketId = localStorage.getItem("socketId");
       if (storedSocketId && storedSocketId !== nuevoId) {
         setNuevoId(storedSocketId);
-        console.log("Nuevo ID (socketId) actualizado:", storedSocketId);
+        //console.log("Nuevo ID (socketId) actualizado:", storedSocketId);
         localStorage.removeItem("socketId"); // Limpia después de asignarlo
       }
     }, 900); // Verifica cada segundo
@@ -123,13 +117,13 @@ export async function action({ request }: ActionFunctionArgs) {
 
   useEffect(() => {
     if (nuevoId && socket && online) {
-      console.log("Emitir evento con nuevoId:", nuevoId);
+      //console.log("Emitir evento con nuevoId:", nuevoId);
       socket.emit('enviarMov', {
         procedencia: userAuth?.id_oaci,
         destino: c7Part1,
         idRegistro: nuevoId
       });
-      console.log('Evento emitido: enviarMov');
+      //console.log('Evento emitido: enviarMov');
     }/*  else if (!online) {
       console.error('Socket no conectado o fuera de línea');
     } */
@@ -182,6 +176,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const [dest2, setDest2] = useState("");
   const [pista, pistaDest] = useState("");
   const [calle, calleDest] = useState("");
+  const [alterno, setAlterno] = useState("");
 
   //capturar fecha
   useEffect(() => {
@@ -217,6 +212,9 @@ export async function action({ request }: ActionFunctionArgs) {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+
+
+
 
   useEffect(() => {
     if (state?.selectedFpl) {
@@ -278,6 +276,13 @@ export async function action({ request }: ActionFunctionArgs) {
       )}`;
       setc7Part1(c7Part1);
       setc7Part2(c7formatoHora);
+
+      const words = c7Value.split(" ");
+      const alterno = words.slice(1).join(" ");
+      setAlterno(alterno)
+      
+
+
 
       const regDest2 = state.selectedFpl.c8.match(/DEST\/(.+)/);
       if (c7Part1 === "ZZZZ") {
@@ -505,6 +510,8 @@ export async function action({ request }: ActionFunctionArgs) {
             />
           </div>
         </div>
+
+
         <div className="flex flex-wrap -mx-3 mb-1">
           <div className="w-full px-3">
             <label
@@ -662,33 +669,51 @@ export async function action({ request }: ActionFunctionArgs) {
             />
           </div>
         </div>
-
         <div className="flex flex-wrap -mx-3 mb-1">
-          <div className="w-full md:w-1/3 px-3">
+          <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <label
               className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-1"
-              htmlFor="idControladorPro"
+              htmlFor="modelo"
             >
               CONTROLADOR
             </label>
             <input
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-              type="text"
+              type="text"              
               id="idControladorPro"
               name="idControladorPro"
               placeholder="controlador"
             />
           </div>
-          <div className="w-full md:w-1/2 px-3 mb-1 md:mb-0">
+          <div className="w-full md:w-1/2 px-3">
             <label
               className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-1"
-              htmlFor="obsProcedencia"
+              htmlFor="nivel"
             >
-              OBSERVACION
+              ALTERNOS
             </label>
             <input
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               type="text"
+              id="alterno"
+              name="alterno"
+              placeholder="alterno"
+              value={alterno}
+              onChange={(e) => setAlterno(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-wrap -mx-3 mb-1">
+          <div className="w-full px-3">
+            <label
+              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+              htmlFor="obsProcedencia"
+            >
+              OBSERVACION
+            </label>
+            <textarea
+              className="resize-y rounded-y h-10 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               id="obsProcedencia"
               name="obsProcedencia"
               placeholder="observacion"
@@ -696,6 +721,8 @@ export async function action({ request }: ActionFunctionArgs) {
           </div>
         </div>
         <br />
+
+        
         <div className="flex space-x-4 ...">
           <div>
             <button
